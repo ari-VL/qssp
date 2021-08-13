@@ -110,9 +110,9 @@ class HMM:
         pi = np.real(pi/np.sum(pi))
         return pi.T
 
-    def state_entropy(self):
+    def state_entropy(self, dist=self.stationary_distribution()):
         #state entropy of the stationary distribution
-        H = entropy(self.stationary_distribution(), base=2)
+        H = entropy(dist, base=2)
         return H
 
     def block_entropies(self, L):

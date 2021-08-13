@@ -62,7 +62,7 @@ class qsHMM:
         return q_words
         
     def q_block(self, L, join=True):
-        #calculates of the words of length L and their probs and returns the joint quantum state
+        #calculates all the words of length L and their probs and returns the joint quantum state
         #TODO: test 
         c_words, c_probs = self.HMM.all_words(L)
         if join:
