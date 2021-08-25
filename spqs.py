@@ -102,4 +102,28 @@ class qsHMM:
         return EE_est
 
     def get_measured_machine(self, measurement):
-        pass
+        '''
+        Computes the measured machine when applying "measurement" to the qs_HMM, returns an HMM object
+        '''
+        #size of the classical alphabet of the measured machine
+        c_abet_size = len(measurement.mOps)
+        #number of states in the HMM
+        n_states = self.HMM.Ts[0].shape[0]
+
+        #initialize an array that will store the labeled transition matrices for the measured machine
+        measured_Ts = np.zeros([c_abet_size, n_states, n_states])
+        
+        #each iteration over i computes th labeled transition matrix of the measured machine T_i
+        for i in range(c_abet_size):
+            #Initialize labeled transition matrix
+            t = np.zeros([n_states, n_states])
+            for j in range(self.alph_size):
+                #compute the probability of measurement outcome i when measuring quantum state j
+                prob = self.alph[j].measure(measurement)[i]
+                #weigh the quantum labeled transition matrix of state j by the probability of seeing out come i, and add that for all js
+                t += (self.HMM.Ts[j]*prob)
+            #store labeled transition matrix T_i    
+            measured_Ts[i] = t
+        #create HMM object with the correct transition matrices
+        measured_mach = HMM(measured_Ts)
+        return measured_mach
