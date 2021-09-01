@@ -183,7 +183,7 @@ class measurement:
     """
 
     def __init__(self, mOps, labels=None,tol_positivity=1e-8):
-         """
+        """
         Parameters
         ----------
         mOps: list of numpy arrays
