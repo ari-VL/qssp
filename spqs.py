@@ -70,7 +70,7 @@ class qsHMM:
             for i in range(1,len(c_words)):
                 q_block = q_block + c_probs[i]*self.q_word(c_words[i],L).state
             q_block = qstate(q_block)
-                return q_block
+            return q_block
         else: 
             q_seq = []
             for i in range(len(c_words)):
