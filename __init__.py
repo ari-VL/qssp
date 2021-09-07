@@ -1,3 +1,3 @@
-from .hmm import HMM
-from .q_utils import qstate
-from spqs import qsHMM
+import hmm as hmm
+import q_utils as utils
+import qshmm as qshmm
