@@ -7,13 +7,45 @@ def near(a, b, rtol = 1e-5, atol = 1e-8):
 
 class HMM:
     '''
-    Ts : np.array,
-    list of labled transition matrices
-
-    init : np.array, 
-    initial probability distribution over hidden states, if None, stationary state distribution is used
+    A Hidden Markov Model representation of a process with basic functionality. 
+    
+    Attributes
+    -----------
+    Ts : np.array
+        Numpy array of labeled transition matrices
+    init : np.array
+        Array containing the initial probability distribution over hidden states. If None, the stationary state distribution is used
+    
+    Methods
+    -------
+    all_words(L)
+        Returns all possible words of length L and their probabilities
+    sample_transition(state)
+        Samples a possible transition from a given hidden state, with its associated probability. Returnsnext state and the emitted symbol
+    sample_words(n_words, L)
+        Samples and returns n_words words of length L
+    stationary_distribution()
+        Returns the stationary state distribution of the HMM as a numpy array
+    state_entropy(dist=None)
+        Returns the Shannon entropy of the given state distribution dist. If None, returns the entropy of the stationary state distribution
+    block_entropies(L)
+        Returns a list of block entropies for words of length=1 to length=L
+    entropy_rate_approx(L)
+        Computes and returns the (difference) entropy rate approximation at length L
+    is_unifilar()
+        Bool- returns True if HMM is unifilar
+    excess_entropy_approx(L)
+        Returns the Excess Entropy approximation at length L
     '''
     def __init__(self, Ts, init = None):
+        '''
+        Parameters
+        -----------
+        Ts: np.array
+            Labeled transition matrices of the HMM
+        init=None: None or np.array
+            Initial state distribution. If none passed, it is taken to be the asymptotic state distribution. 
+        '''
         self.Ts = Ts
         self.init = init
         self.alphabet  = np.arange(len(Ts))
@@ -23,7 +55,16 @@ class HMM:
             self.init = self.stationary_distribution()
 
     def all_words(self, L):
-
+        '''Returns all possible words of length L and their probabilities
+        Parameters
+        ----------
+        L: int
+            Length of words to be computed
+        Returns
+        -------
+        tuple
+            (words, probs) are lists of allowed words and their associated probabilities
+        '''
         init_states = self.init
         Ts = self.Ts
 
@@ -50,8 +91,16 @@ class HMM:
         return words, probs
 
     def sample_transition(self, state):
-        ''' Samples a possible transition from a given hidden state, with its associated probability.
-        Returns next state and the emitted symbol'''
+        ''' Samples a possible transition from a given hidden state, with its associated probability. Returnsnext state and the emitted symbol
+        Parameters
+        -----------
+        state: int
+            State from which a transition will be sampled
+        Returns
+        -------
+        tuple
+            (new_state, symbol) are both int representing the new state and the symbol emitted during transition
+        '''
         transition_states = []
         transition_symbols = []
         probs = []
@@ -76,7 +125,17 @@ class HMM:
 
     def sample_words(self, n_words, L):
         '''
-        Returns n_words sample words of length L
+        Samples and returns n_words words of length L
+        Parameters
+        ----------
+        n_words: int
+            Number of words to be sampled and returned
+        L: int
+            Length of words to be sampled and returned
+        Returns
+        -------
+        list 
+            List of sampled words
         '''
         words = []
 
@@ -99,6 +158,7 @@ class HMM:
         return words
 
     def stationary_distribution(self):
+        '''Returns the stationary state distribution of the HMM as a numpy array'''
         #transition matrix of the HMM
         t = np.sum(self.Ts,0)
         t = t.T
@@ -111,6 +171,16 @@ class HMM:
         return pi.T
 
     def state_entropy(self, dist=None):
+        '''Returns the Shannon entropy of the given state distribution dist. If None, returns the entropy of the stationary state distribution
+        Parameters
+        ----------
+        dist=None : dist
+            Distribution whose Shannon entropy will be computed, if None then returns Shannon Entropy of stationary state distribution
+        Returns
+        -------
+        float
+            Shannon entropy rate of state distribution
+         '''
         #state entropy of the stationary distribution
         if dist == None:
             dist = self.stationary_distribution()
@@ -118,6 +188,16 @@ class HMM:
         return H
 
     def block_entropies(self, L):
+        '''Returns a list of block entropies for words of length=1 to length=L
+        Parameters
+        ----------
+        L: int
+            Maximum word length for which block entropies will be computed
+        Returns
+        -------
+        list
+            List of block entropies for words from length 1 to L
+        '''
         block_entropies = [0]
 
         for l in range(1,L):
@@ -126,12 +206,24 @@ class HMM:
         return block_entropies
 
     def entropy_rate_approx(self, L):
+        '''
+        Computes and returns the (difference) entropy rate approximation at length L
+        Parameters
+        ----------
+        L: int
+            Length for which entropy rate approximation is computed.
+        Returns
+        -------
+        float
+            Entropy rate approximation
+        '''
 
         hmu_L = entropy(self.all_words(L)[1],base=2) - entropy(self.all_words(L-1)[1],base=2)
 
         return hmu_L
 
     def is_unifilar(self):
+        '''bool - returns True if HMM is unifilar'''
         for T in self.Ts:
             non_zero= np.count_nonzero(T, axis=1)
             count= len(non_zero[non_zero>1])
@@ -141,7 +233,16 @@ class HMM:
         return True
 
     def excess_entropy_approx(self, L):
-
+        ''' Returns the Excess Entropy approximation at length L
+        Parameters
+        ----------
+        L: int
+            Wordlength at which the entropy rate approximation is computed
+        Returns
+        -------
+        float
+            Excess entropy approximation
+        '''
         EE_L = entropy(self.all_words(L)[1],base=2) - L * self.entropy_rate_approx(L)
 
         return EE_L
