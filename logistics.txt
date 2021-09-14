@@ -1,0 +1,38 @@
+TO DO: 
+
+General
+-------
+1. Inline documentation
+
+hmm
+----
+1. Test!
+2. Change alphabet to labels as opposed to just integers
+
+q_utils
+------
+1. Test!
+2. Make sure you can add/manipulate qstates!!
+
+qshmm
+------
+1. Add documentation to qshmm
+2. Fix and test q_block 
+3. Test 
+4. Incorporate change of alphabet from integers to labels. Do we want q alphabet as dictionary?
+
+
+TO ADD:
+
+qshmm
+------
+1. Adaptive Measurements
+2. Nonlocal Measurements
+
+msp
+----
+General methods for manipulation of nonunifilar HMMs
+1. Construct msp
+
+
+RECENT CHANGES:
