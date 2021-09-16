@@ -1,5 +1,5 @@
 import numpy as np
-from q_utils import qstate, measurement
+from .q_utils import qstate, measurement
 # Some useful Machines 
 
 #Two state machines
@@ -30,8 +30,8 @@ def RIP(p=0.5,q=0.5):
 # #Some useful states 
 ket0a = np.array([1,0])
 ket1a = np.array([0,1])
-ketpa = (1/np.sqrt(2))*(ket0+ket1)
-ketma = (1/np.sqrt(2))*(ket0-ket1)
+ketpa = (1/np.sqrt(2))*(ket0a+ket1a)
+ketma = (1/np.sqrt(2))*(ket0a-ket1a)
 
 def bloch_ket(theta, phi=0):
     a = np.cos(theta/2)
