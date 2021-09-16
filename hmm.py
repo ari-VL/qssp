@@ -15,15 +15,21 @@ class HMM:
         Numpy array of labeled transition matrices
     init : np.array
         Array containing the initial probability distribution over hidden states. If None, the stationary state distribution is used
-    
+    alphabet : np.array
+        Array containing symbols alphabet for HMM
+    state_labels : np.array
+        Array containing labels for states of HMM
+
     Methods
     -------
+    is_unifilar()
+        Bool- returns True if HMM is unifilar
     all_words(L)
         Returns all possible words of length L and their probabilities
     sample_transition(state)
         Samples a possible transition from a given hidden state, with its associated probability. Returnsnext state and the emitted symbol
-    sample_words(n_words, L)
-        Samples and returns n_words words of length L
+    sample_words(n, L)
+        Samples and returns n words of length L
     stationary_distribution()
         Returns the stationary state distribution of the HMM as a numpy array
     state_entropy(dist=None)
@@ -32,8 +38,6 @@ class HMM:
         Returns a list of block entropies for words of length=1 to length=L
     entropy_rate_approx(L)
         Computes and returns the (difference) entropy rate approximation at length L
-    is_unifilar()
-        Bool- returns True if HMM is unifilar
     excess_entropy_approx(L)
         Returns the Excess Entropy approximation at length L
     '''
@@ -47,12 +51,24 @@ class HMM:
             Initial state distribution. If none passed, it is taken to be the asymptotic state distribution. 
         '''
         self.Ts = Ts
-        self.init = init
         self.alphabet  = np.arange(len(Ts))
-        self.states = np.arange(len(Ts[0]))
-        #initialize state distribution as pi
+        self.state_labels = np.arange(len(Ts[0]))
+        
+        #initialize state distribution as pi if not specified
         if init == None:
             self.init = self.stationary_distribution()
+        else:
+            self.init = init
+
+    def is_unifilar(self):
+        '''bool - returns True if HMM is unifilar'''
+        for T in self.Ts:
+            non_zero= np.count_nonzero(T, axis=1)
+            count= len(non_zero[non_zero>1])
+            if count > 0:
+                return False
+
+        return True
 
     def all_words(self, L):
         '''Returns all possible words of length L and their probabilities
@@ -123,12 +139,12 @@ class HMM:
 
         return new_state, symbol
 
-    def sample_words(self, n_words, L):
+    def sample_words(self, n, L):
         '''
-        Samples and returns n_words words of length L
+        Samples and returns n words of length L
         Parameters
         ----------
-        n_words: int
+        n: int
             Number of words to be sampled and returned
         L: int
             Length of words to be sampled and returned
@@ -140,13 +156,13 @@ class HMM:
         words = []
 
         #determine initial state for all n words
-        init_states = np.random.choice(np.arange(0,len(self.init)),n_words,p=self.init)
+        init_states = np.random.choice(np.arange(0,len(self.init)),n,p=self.init)
 
-        for n in range(n_words):
+        for i in range(n):
             word_n = ''
 
             # set initial state vector
-            state = init_states[n]
+            state = init_states[i]
 
             for l in range(L):
 
@@ -188,7 +204,7 @@ class HMM:
         return H
 
     def block_entropies(self, L):
-        '''Returns a list of block entropies for words of length=1 to length=L
+        '''Returns a list of block entropies for words of length=0 to length=L
         Parameters
         ----------
         L: int
@@ -200,7 +216,7 @@ class HMM:
         '''
         block_entropies = [0]
 
-        for l in range(1,L):
+        for l in range(1,L+1):
             block_entropies.append(entropy(self.all_words(l)[1],base=2))
 
         return block_entropies
@@ -222,16 +238,6 @@ class HMM:
 
         return hmu_L
 
-    def is_unifilar(self):
-        '''bool - returns True if HMM is unifilar'''
-        for T in self.Ts:
-            non_zero= np.count_nonzero(T, axis=1)
-            count= len(non_zero[non_zero>1])
-            if count > 0:
-                return False
-
-        return True
-
     def excess_entropy_approx(self, L):
         ''' Returns the Excess Entropy approximation at length L
         Parameters
@@ -243,7 +249,13 @@ class HMM:
         float
             Excess entropy approximation
         '''
-        EE_L = entropy(self.all_words(L)[1],base=2) - L * self.entropy_rate_approx(L)
+        block_entropies = self.block_entropies(L)
+        print(L, block_entropies)
+
+        if L > 1:
+            EE_L = block_entropies[-1] - L * (block_entropies[-1] - block_entropies[-2])
+        else: 
+            EE_L = 0
 
         return EE_L
 

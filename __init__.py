@@ -1,3 +1,3 @@
-import hmm as hmm
-import q_utils as utils
-import qshmm as qshmm
+from .hmm import HMM
+from .q_utils import qstate, measurement
+from .qshmm import qsHMM

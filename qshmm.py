@@ -1,5 +1,4 @@
 '''
-Class "HMM_SPQS", initialized by (Transition Matrices, Alphabet)
 
 Methods: 
     all_words(L): all words of length L with associated probabilities
@@ -35,10 +34,41 @@ import numpy as np
 import scipy.linalg as la
 from scipy.stats import entropy
 
-import hmm
-import q_utils
+from .hmm import HMM
+from .q_utils import qstate
 
 class qsHMM:
+    '''
+    A quantum state Hidden Markov Model consisting of a classical HMM
+    and an alphabet of quantum states.
+    
+    Attributes
+    -----------
+    HMM : HMM object
+        Numpy array of labeled transition matrices
+    alph : list of qstates
+        List of quantum states which are associated with symbols of the classical HMM
+    alph_size : int
+        Size of the alphabet of quantum states
+
+    Methods
+    -------
+    q_word(word)
+        Turns given classical word of into quantum state using the quantum alphabet
+    q_words(n, L)
+        Samples words of length L with appropriate probabilities n times and returns list associated q_words
+    q_block(L, join = True)
+        Returns single quantum state represetning all words of length L
+        or (if join == False) a quantum state and probability for each word
+    q_block_entropies(L):
+        Returns a list of von Neumann entropies for blocks of length=1 to length=L
+    q_entropy_rate(L)
+        Computes and returns the (difference) von Neumann entropy rate approximation at length L
+    q_excess_entropy(L)
+        Returns the quantum excess entropy approximation at length L
+    get_measured_machine(measurement)
+        Returns the classical HMM generator corresponding to a particular measurement basis
+    '''
 
     def __init__(self, HMM, alph):
         #should it take in Trans Matrices?
@@ -47,34 +77,34 @@ class qsHMM:
         self.alph_size= len(alph)
         #check alph size is equal to no. of Ts
 
-    def q_word(self, c_word,L):
-        #takes in a classical word and turns it into a quntum state word
-        q_word = self.alph[int(c_word[0])].state
-        for i in range(1,len(c_word)):
-            q_word = np.kron(q_word, self.alph[int(c_word[i])].state)
+    def q_word(self, word):
+        #takes in a classical word and turns it into a quantum state
+        q_word = self.alph[int(word[0])].state
+        for i in range(1,len(word)):
+            q_word = np.kron(q_word, self.alph[int(word[i])].state)
         q_word = qstate(q_word)
         return q_word
         
-    def q_words(self, n_words, L):
-        #samples n_words of length L 
-        c_words = self.HMM.sample_words(n_words,L)
-        q_words = [self.q_word(c_word, L) for c_word in c_words]
+    def q_words(self, n, L):
+        #samples n words of length L and returns corresponding quantum states 
+        words = self.HMM.sample_words(n,L)
+        q_words = [self.q_word(word) for word in words]
         return q_words
         
     def q_block(self, L, join=True):
         #calculates all the words of length L and their probs and returns the joint quantum state
         #TODO: test 
-        c_words, c_probs = self.HMM.all_words(L)
+        words, c_probs = self.HMM.all_words(L)
         if join:
-            q_block = c_probs[0] * self.q_word(c_words[0],L).state
-            for i in range(1,len(c_words)):
-                q_block = q_block + c_probs[i]*self.q_word(c_words[i],L).state
+            q_block = c_probs[0] * self.q_word(words[0]).state
+            for i in range(1,len(words)):
+                q_block = q_block + c_probs[i]*self.q_word(words[i]).state
             q_block = qstate(q_block)
             return q_block
         else: 
             q_seq = []
-            for i in range(len(c_words)):
-                q_seq.append(self.q_word(c_words[i],L).state)
+            for i in range(len(words)):
+                q_seq.append(self.q_word(words[i]).state)
             return q_seq, c_probs
 
     def q_block_entropies(self, L):
