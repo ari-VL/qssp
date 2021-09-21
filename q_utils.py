@@ -54,7 +54,7 @@ class qstate:
         #if amplitudes is ket --> dm
         if amplitudes.ndim == 1:
             self.dim = len(amplitudes)
-            self.state = np.outer(amplitudes,amplitudes)
+            self.state = np.outer(amplitudes.conj().T,amplitudes)
         
         #if amplitudes is matrix -> dm
         elif amplitudes.ndim >= 2:
