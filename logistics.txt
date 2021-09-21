@@ -3,16 +3,19 @@ TO DO:
 General
 -------
 1. Inline documentation
+2. PEP8 naming conventions
 
 hmm
 ----
 1. Test!
 2. Change alphabet to labels as opposed to just integers
 
-q_utils
+q_objects
 ------
 1. Test!
-2. Make sure you can add/manipulate qstates!!
+2. Overload addition/subtraction
+3. Check/implement partial trace
+4. Tensor product
 
 qshmm
 ------
@@ -20,6 +23,9 @@ qshmm
 2. Fix and test q_block 
 3. Test 
 4. Incorporate change of alphabet from integers to labels. Do we want q alphabet as dictionary?
+
+utils.py
+-----------
 
 
 TO ADD:
@@ -34,5 +40,9 @@ msp
 General methods for manipulation of nonunifilar HMMs
 1. Construct msp
 
+q_utils
+---
+1. Representation/manipulation of kets/bras rather than just density matrices
 
 RECENT CHANGES:
+1. Add standard measurements

@@ -55,11 +55,15 @@ class qstate:
         if amplitudes.ndim == 1:
             self.dim = len(amplitudes)
             self.state = np.outer(amplitudes.conj().T,amplitudes)
+            if(not self.is_normalized()):
+                print("ERROR: Not normalized")
         
         #if amplitudes is matrix -> dm
         elif amplitudes.ndim >= 2:
             self.dim = len(amplitudes[0])
             self.state = amplitudes
+            if(not self.is_normalized()):
+                print("ERROR: Not normalized")
         
         else:
             print("ERROR: Invalid input dimensions")

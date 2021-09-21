@@ -3,7 +3,7 @@ import scipy.linalg as la
 from scipy.stats import entropy
 
 from .hmm import HMM
-from .q_utils import qstate
+from .q_objects import qstate
 
 class qsHMM:
     '''
