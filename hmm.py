@@ -63,6 +63,7 @@ class HMM:
     def is_unifilar(self):
         '''bool - returns True if HMM is unifilar'''
         for T in self.Ts:
+            #for each laveled transition matrix count number of non zero entries per row and flag false if any is bigger than 0
             non_zero= np.count_nonzero(T, axis=1)
             count= len(non_zero[non_zero>1])
             if count > 0:
