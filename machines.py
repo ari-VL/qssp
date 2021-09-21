@@ -43,3 +43,7 @@ ket0 = qstate(ket0a)
 ket1 = qstate(ket1a)
 ketp = qstate(ketpa)
 ketm = qstate(ketma)
+
+A_01 = np.array([ket0,ket1])
+A_0p = np.array([ket0,ketp])
+A_pm = np.array([ketp,ketm])
