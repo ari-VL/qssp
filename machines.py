@@ -36,7 +36,7 @@ ketma = (1/np.sqrt(2))*(ket0a-ket1a)
 def bloch_ket(theta, phi=0):
     a = np.cos(theta/2)
     b = np.sin(theta/2)
-    ket = a*ket0a + b*np.exp(i*phi)*ket1a
+    ket = a*ket0a + b*np.exp(1j*phi)*ket1a
     return qstate(ket)
 
 ket0 = qstate(ket0a)
