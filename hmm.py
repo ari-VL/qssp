@@ -41,7 +41,7 @@ class HMM:
     excess_entropy_approx(L)
         Returns the Excess Entropy approximation at length L
     '''
-    def __init__(self, Ts, init = None):
+    def __init__(self, Ts, init = np.array([])):
         '''
         Parameters
         -----------
@@ -55,7 +55,7 @@ class HMM:
         self.state_labels = np.arange(len(Ts[0]))
         
         #initialize state distribution as pi if not specified
-        if init == None:
+        if init.size == 0:
             self.init = self.stationary_distribution()
         else:
             self.init = init
