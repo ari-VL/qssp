@@ -180,7 +180,7 @@ class measurement:
 
     Methods
     -------
-    check_postive()
+    is_postive()
         Returns True if all eigenvalues of measurement operators are non-negative.
     is_complete()
         Returns True if measurement operators sum to the identity (within tolerance).
@@ -207,7 +207,7 @@ class measurement:
             self.labels=labels
         self.tol_positivity= tol_positivity
 
-    def check_positive(self):
+    def is_positive(self):
         """Returns True if all eigenvalues of measurement operators are non-negative, otherwise returns False."""
 
         for mop in self.mOps:
@@ -226,6 +226,6 @@ class measurement:
     def is_complete(self):
         """Returns True if measurement operators sum to the identity (within tolerance), otherwise returns False."""
         
-        return np.allclose(np.sum(self.mOps,axis=1),np.identity(self.n_ops))
+        return np.allclose(np.sum(self.mOps,axis=0),np.identity(self.n_ops))
     
     #TODO: is_valid
