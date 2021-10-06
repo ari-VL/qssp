@@ -251,7 +251,7 @@ class HMM:
             Excess entropy approximation
         '''
         block_entropies = self.block_entropies(L)
-        print(L, block_entropies)
+        #print(L, block_entropies)
 
         if L > 1:
             EE_L = block_entropies[-1] - L * (block_entropies[-1] - block_entropies[-2])
