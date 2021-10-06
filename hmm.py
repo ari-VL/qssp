@@ -85,27 +85,35 @@ class HMM:
         init_states = self.init
         Ts = self.Ts
 
-        words = [str(x) for x in range(len(Ts))]
-        probs = []
+        if L < 1:
+            words = ['']
+            probs = [1]
+            
+            return words, probs
 
-        for l in range(1,L):
-            words_l = []
-            for x in range(len(Ts)):
-                for word in words:
-                    words_l.append(word + str(x))
-            words = words_l
+        else:
 
-        for word in list(words):
-            prob = init_states.T
-            for x in word:
-                prob = np.matmul(prob,Ts[int(x)])
-            prob = sum(prob)
-            if near(prob,0):
-                words.remove(word)
-            else:
-                probs.append(prob)
+            words = [str(x) for x in range(len(Ts))]
+            probs = []
 
-        return words, probs
+            for l in range(1,L):
+                words_l = []
+                for x in range(len(Ts)):
+                    for word in words:
+                        words_l.append(word + str(x))
+                words = words_l
+
+            for word in list(words):
+                prob = init_states.T
+                for x in word:
+                    prob = np.matmul(prob,Ts[int(x)])
+                prob = sum(prob)
+                if near(prob,0):
+                    words.remove(word)
+                else:
+                    probs.append(prob)
+
+            return words, probs
 
     def sample_transition(self, state):
         ''' Samples a possible transition from a given hidden state, with its associated probability. Returnsnext state and the emitted symbol

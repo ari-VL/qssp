@@ -76,7 +76,7 @@ class qsHMM:
 
     def q_block_entropies(self, L):
         if L > 0:
-            ents = [self.q_block(l).vn_entropy() for l in range(1,L+1)]
+            ents = [0] + [self.q_block(l).vn_entropy() for l in range(1,L+1)]
         else:
             ents = []
             print("ERROR: Invalid block length (must be a positive integer)")
