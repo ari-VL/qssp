@@ -184,7 +184,7 @@ class qsHMM:
         # Returns list of entropies over mixed states for different L values
         return H_avg
 
-    def is_synched(mixed_state):
+    def is_synched(self, mixed_state):
         # If mixed state is concentrated in one generator state returns True, else False
         if not near(sum(mixed_state),1):
             print("ERROR: State not normalized.")
