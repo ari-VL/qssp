@@ -269,4 +269,43 @@ class HMM:
         return EE_L
 
 
+def evolve (hmm, N, mu0=None, transients=0):
+    '''
+    takes an initial mixed state and evolves it N time steps (a single path)
 
+    Parameters
+    -----------
+    hmm: HMM 
+        Hidden Markov Model of the process of interest
+    N: int
+        Number of time steps to be computed
+    mu0=None: np.array
+        Initial mixed state
+    transients=0: int
+        Number of transients to be thrown away from the path. 
+
+    Returns
+    --------
+    np.array with the mixed states visited in the path, will have N-transients entries
+    '''
+
+    ts = hmm.Ts
+    num_states = len(ts[0])
+    mstates = np.zeros((N, num_states))
+
+
+    if mu0==None: 
+        mu0 = hmm.init
+    assert near(np.sum(mu0), 1.0)
+
+    long_word = hmm.sample_words(1, N)[0]
+    mstates[0]=mu0
+
+    for i in range(1,len(long_word)):
+        mu = np.matmul(mstates[i-1], ts[long_word[i]])
+        mu = mu/np.sum(mu)
+        assert near(np.sum(mu), 1.0)
+        mstates[i]=mu
+    
+    mstates = mstates[transients:]
+    return mstates
