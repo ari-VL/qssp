@@ -175,7 +175,7 @@ class qsHMM:
                             S_t.append(S_new/sum(S_new))
                             new_prob = prob_prev*sum(S_new)
                             probs_t.append(new_prob)
-                            H_avg_t += new_prob * entropy(S_new/sum(S_new))
+                            H_avg_t += new_prob * entropy(S_new/sum(S_new),base=2)
 
             S.append(S_t)
             probs.append(probs_t)
