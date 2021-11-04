@@ -269,7 +269,7 @@ class HMM:
         return EE_L
 
 
-def evolve (hmm, N, mu0=None, transients=0):
+def evolve(hmm, N, mu0=None, transients=0):
     '''
     takes an initial mixed state and evolves it N time steps (a single path)
 
@@ -302,10 +302,40 @@ def evolve (hmm, N, mu0=None, transients=0):
     mstates[0]=mu0
 
     for i in range(1,len(long_word)):
-        mu = np.matmul(mstates[i-1], ts[long_word[i]])
+        mu = np.matmul(mstates[i-1], ts[int(long_word[i])])
         mu = mu/np.sum(mu)
         assert near(np.sum(mu), 1.0)
         mstates[i]=mu
     
     mstates = mstates[transients:]
     return mstates
+
+def many_paths(hmm, N, runs, mu0=None, transients=0):
+    '''
+    Runs evolve 'runs' times and stitches all the resulting mixed states into one array. 
+    For any well behaved hmm and a sufficiently large number of N and runs, this should be 
+    an approximation of the msp states (w/o transitions)
+
+    Parameters:
+    -----------
+    hmm: HMM
+        hmm of the process of interest
+    N: int
+        number of timesteps to evolve initial state
+    runs: int
+        number of times the evolution is run (starting in the same initial state)
+    mu0: np.array
+        initial state of hmm
+    transients: int
+        number of transient states to be ignored for each run of the evolution
+
+    Returns:
+    --------
+    np.array with the mixed states visited during 'runs' runs of length (N-transients)
+    '''
+    ms_all = evolve(hmm, N, mu0, transients)
+    for i in range(runs-1):
+        path = evolve(machine, N, mu0, transients)
+        ms_all = np.concatenate((ms_all, path),0)
+    
+    return ms_all
