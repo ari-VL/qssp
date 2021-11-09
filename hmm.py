@@ -339,3 +339,27 @@ def many_paths(hmm, N, runs, mu0=None, transients=0):
         ms_all = np.concatenate((ms_all, path),0)
     
     return ms_all
+
+def three_states_to_simplex(all_states):
+    '''
+    takes in an array of mixed states (from 3 state machine) and returns two ordered lists of x and y coordinates for the 2-simplex
+    '''
+    x = []
+    y = []
+    # run through keys and extract MSs
+    for ms in xrange(len(all_states)):
+        state = all_states[ms]
+        a = state[0]; b = state[1]; c = state[2]
+        # WLOG take two coordinates
+        x.append(b+0.5*c)
+        y.append(c*np.sqrt(3)/2.0)
+    return x, y
+
+def process_two_states(all_states):
+    '''
+    takes in an array of mixed states (from 2 state machine) and returns two ordered lists of x and y coordinates for the 1-simplex
+    '''
+    x = []
+    for ms in xrange(len(all_states)):
+        x.append(all_states[ms][0])
+    return x
