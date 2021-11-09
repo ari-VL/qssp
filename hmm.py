@@ -269,7 +269,7 @@ class HMM:
         return EE_L
 
 
-def evolve(hmm, N, mu0=None, transients=0):
+def evolve(hmm, N, mu0=None, transients=0, word=False):
     '''
     takes an initial mixed state and evolves it N time steps (a single path)
 
@@ -308,9 +308,13 @@ def evolve(hmm, N, mu0=None, transients=0):
         mstates[i]=mu
     
     mstates = mstates[transients:]
-    return mstates
+    if word:
+        return mstates, long_word
+    else:
+        return mstates
 
 def many_paths(hmm, N, runs, mu0=None, transients=0):
+    #TODO: allow different initial states for every run?
     '''
     Runs evolve 'runs' times and stitches all the resulting mixed states into one array. 
     For any well behaved hmm and a sufficiently large number of N and runs, this should be 
@@ -335,7 +339,7 @@ def many_paths(hmm, N, runs, mu0=None, transients=0):
     '''
     ms_all = evolve(hmm, N, mu0, transients)
     for i in range(runs-1):
-        path = evolve(machine, N, mu0, transients)
+        path = evolve(hmm, N, mu0, transients)
         ms_all = np.concatenate((ms_all, path),0)
     
     return ms_all
