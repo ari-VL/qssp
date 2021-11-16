@@ -22,7 +22,7 @@ def three_states_to_simplex(all_states):
     x = []
     y = []
     # run through keys and extract MSs
-    for ms in xrange(len(all_states)):
+    for ms in range(len(all_states)):
         state = all_states[ms]
         a = state[0]; b = state[1]; c = state[2]
         # WLOG take two coordinates
@@ -69,5 +69,3 @@ def three_state_msp_scatter(x, y,filename='none'):
 
 #TODO: Add 2D plotting functionality: msp points in simplex, histogram
 #TODO: Add 3D animation code
-
-
