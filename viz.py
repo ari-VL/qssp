@@ -13,6 +13,7 @@ font = {'family': 'serif',
     }
 
 #Basic Mixed States Processing functions
+####
 
 def three_states_to_simplex(all_states):
     '''
@@ -38,7 +39,9 @@ def two_states_to_simplex(all_states):
         x.append(all_states[ms][0])
     return x
 
-##Basic mixed states plotting functions
+#Basic mixed states plotting functions
+#####
+
 def three_state_msp_scatter(x, y,filename='none'):
     '''
     takes in list of ordered x and y values and returns a scatter plot with mixed states in the 2-simplex
@@ -62,4 +65,9 @@ def three_state_msp_scatter(x, y,filename='none'):
         plt.savefig(filename+'.png',format='png',bbox_inches='tight')
     plt.show()
     return
+
+
+#TODO: Add 2D plotting functionality: msp points in simplex, histogram
+#TODO: Add 3D animation code
+
 
