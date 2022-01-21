@@ -41,7 +41,7 @@ class qstate:
         Returns measurement outcomes when applying measurement sampled 'num_samples' times with correct probabilities
     """
 
-    def __init__(self, amplitudes):
+    def __init__(self, amplitudes, test_norm = True):
         """
         Parameters
         ----------
@@ -55,19 +55,49 @@ class qstate:
         if amplitudes.ndim == 1:
             self.dim = len(amplitudes)
             self.state = np.outer(amplitudes.conj().T,amplitudes)
-            if(not self.is_normalized()):
-                print("ERROR: Not normalized")
+            if(test_norm and (not self.is_normalized())):
+                print("WARNING: Not normalized")
         
         #if amplitudes is matrix -> dm
         elif amplitudes.ndim >= 2:
             self.dim = len(amplitudes[0])
             self.state = amplitudes
-            if(not self.is_normalized()):
-                print("ERROR: Not normalized")
+            if(test_norm and (not self.is_normalized())):
+                print("WARNING: Not normalized")
         
         else:
             print("ERROR: Invalid input dimensions")
-        
+    
+    def __add__(self, state_2):
+        """ Overloaded addition for qstates."""
+        sum = self.state + state_2.state
+
+        return qstate(np.array(sum))
+
+    def __sub__(self, state_2):
+        """ Overloaded subtraction for qstates."""
+        diff = self.state - state_2.state
+
+        return qstate(np.array(diff))
+
+    def __mul__(self, num):
+        """ Overloaded multiplication for qstates."""
+        mult = num * self.state
+
+        return qstate(np.array(mult), test_norm=False)
+
+    def __rmul__(self, num):
+        """ Overloaded reverse multiplication for qstates."""
+        mult = num * self.state
+
+        return qstate(np.array(mult), test_norm=False)
+
+    def __truediv__(self, num):
+        """ Overloaded division for qstates."""
+        div = self.state / num
+
+        return qstate(np.array(div), test_norm=False)
+
     def is_normalized(self):
         """ Returns True if state is normalized array, False otherwise."""
 
