@@ -25,7 +25,7 @@ class qsHMM:
     Methods
     -------
     q_word(word)
-        Turns given classical word of into quantum state using the quantum alphabet
+        Turns given classical word into quantum state using the quantum alphabet
     q_words(n, L)
         Samples words of length L with appropriate probabilities n times and returns list associated q_words
     q_block(L, join = True)
