@@ -195,6 +195,41 @@ class qstate:
             outcome = np.random.choice(measurement.labels, p = self.measure(measurement))
             outcomes[i]=outcome
         return outcomes
+
+    def add_noise(self,noise_type,noise_level):
+        """Returns state after passing it through a noisy channel.
+
+        Parameters
+        ----------
+        noise_type: str
+            Type of noisy channel to use, can be 'phaseflip', 'bitflip',
+            'bitphaseflip', 'depolarizing', or 'amplitude_damping'
+        noise_level: float
+            Amount of noise to apply
+        """
+
+        if noise_type == 'phaseflip':
+            E_0 = np.sqrt(noise_level)*np.array(([1,0],[0,1]))
+            E_1 = np.sqrt(1-noise_level)*np.array(([1,0],[0,-1]))
+            noisy_state = E_0 @ self.state @ (E_0.conj().T) + E_1 @ self.state @ (E_1.conj().T) 
+        elif noise_type == 'bitflip':
+            E_0 = np.sqrt(noise_level)*np.array(([1,0],[0,1]))
+            E_1 = np.sqrt(1-noise_level)*np.array(([0,1],[1,0]))
+            noisy_state = E_0 @ self.state @ (E_0.conj().T) + E_1 @ self.state @ (E_1.conj().T) 
+        elif noise_type == 'bitphaseflip':
+            E_0 = np.sqrt(noise_level)*np.array(([1,0],[0,1]))
+            E_1 = np.sqrt(1-noise_level)*np.array(([0,-1j],[1j,0]))
+            noisy_state = E_0 @ self.state @ (E_0.conj().T) + E_1 @ self.state @ (E_1.conj().T)
+        elif noise_type == 'depolarizing':
+            noisy_state = noise_level/2 * np.array([[1,0],[0,1]]) + (1-noise_level) * self.state
+        elif noise_type == 'amplitude_damping':
+            E_0 = np.array(([1,0],[0,np.sqrt(1-noise_level)]))
+            E_1 = np.array(([0,np.sqrt(noise_level)],[0,0]))
+            noisy_state = E_0 @ self.state @ (E_0.conj().T) + E_1 @ self.state @ (E_1.conj().T)
+        else:
+            raise ValueError("Unknown noise type: %s" % noise_type)
+
+        return(qstate(noisy_state))
     
 class measurement:
     """A quantum measurement, consisting of a set of operators

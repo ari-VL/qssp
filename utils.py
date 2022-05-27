@@ -34,6 +34,11 @@ def RIP(p=0.5,q=0.5):
 
 
 # #Some useful states 
+identity = qstate(np.array([[1,0],[0,1]]), test_norm=False)
+sigma_x = qstate(np.array([[0,1],[1,0]]), test_norm=False)
+sigma_y = qstate(np.array([[0,-1j],[1j,0]]), test_norm=False)
+sigma_z = qstate(np.array([[1,0],[0,-1]]), test_norm=False)
+
 ket0a = np.array([1,0])
 ket1a = np.array([0,1])
 ketpa = (1/np.sqrt(2))*(ket0a+ket1a)

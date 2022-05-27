@@ -43,13 +43,20 @@ class qsHMM:
         Returns average state uncertainty of observer measuring in fixed basis on up to L sites
     '''
 
-    def __init__(self, HMM, alph):
+    def __init__(self, HMM, alph, noise_type='None',noise_level=0):
         #should it take in Trans Matrices?
         self.HMM=HMM
-        self.alph= alph
+        self.noise_type=noise_type
+        self.noise_level=noise_level
+        if noise_level != 0:
+            self.alph = []
+            for alph_state in alph:
+                self.alph.append(alph_state.add_noise(noise_type, noise_level))
+        else:
+            self.alph= alph
         self.alph_size= len(alph)
         #check alph size is equal to no. of Ts
-
+        
     def q_word(self, word):
         #takes in a classical word and turns it into a quantum state
         q_word = self.alph[int(word[0])].state
