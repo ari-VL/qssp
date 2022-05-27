@@ -37,3 +37,8 @@ def test_SNS_stationary_dist():
 def test_GM_stationary_entropy():
     assert GoldenMean().state_entropy() == 0.9182958340544894
     assert GoldenMean().state_entropy([1,0]) == 0
+
+def test_SNS_stationary_entropy():
+    assert SNS().state_entropy == 1
+    assert SNS().state_entropy([0,1])== 0
+
