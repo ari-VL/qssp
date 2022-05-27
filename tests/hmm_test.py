@@ -38,7 +38,7 @@ def test_GM_stationary_entropy():
     assert GoldenMean().state_entropy([1,0]) == 0
 
 def test_SNS_stationary_entropy():
-    assert SNS().state_entropy == 1
+    np.testing.assert_almost_equal(SNS().state_entropy(), 1)
     assert SNS().state_entropy([0,1])== 0
 
 def test_GM_sample_transition():
