@@ -48,3 +48,7 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+workspace.code-workspace
+Untitled.ipynb
+.ipynb_checkpoints/Untitled-checkpoint.ipynb
+.gitignore
