@@ -37,3 +37,36 @@ def test_SNS_stationary_dist():
 def test_GM_stationary_entropy():
     assert GoldenMean().state_entropy() == 0.9182958340544894
     assert GoldenMean().state_entropy([1,0]) == 0
+
+def test_GM_sample_transition():
+    A_transitions = [(0,'1'),(1,'0')]
+    B_transitions = [(0,'1')]
+    sampled_A_transitions = [GoldenMean().sample_transition(0) for i in range(10)]
+    sampled_B_transitions = [GoldenMean().sample_transition(1) for i in range(10)]
+
+    for i in range(10):
+        assert sampled_A_transitions[i] in A_transitions
+        assert sampled_B_transitions[i] in B_transitions
+
+def test_GM_block_entropies():
+    np.testing.assert_allclose(GoldenMean().block_entropies(10), [0, 0.9182958340544894, 1.584962500721156, 2.251629167387823, 2.91829583405449, 3.584962500721157, 4.251629167387824, 4.91829583405449, 5.584962500721157, 6.251629167387822, 6.918295834054489])
+
+def test_SNS_block_entropies():
+    np.testing.assert_allclose(SNS().block_entropies(10), [0, 0.8112781244591328, 1.5, 2.1800365325772657, 2.8584585933443494, 3.5364882355820626, 4.2144073285182, 4.892292155061646, 5.570165618160434, 6.248035117839492, 6.925903179808621])
+
+def test_GM_entropy_rate_approx():
+    assert GoldenMean().entropy_rate_approx(1) == 0.9182958340544894
+    assert GoldenMean().entropy_rate_approx(10) == 0.666666666666667
+
+def test_SNS_entropy_rate_approx():
+    assert SNS().entropy_rate_approx(1) == 0.8112781244591328
+    assert SNS().entropy_rate_approx(10) == 0.6778680619691295
+
+def test_GM_excess_entropy_approx():
+    assert GoldenMean().excess_entropy_approx(1) == 0
+    assert GoldenMean().excess_entropy_approx(5) == 0.25162916738782215
+    assert GoldenMean().excess_entropy_approx(10) == 0.2516291673878195
+
+def test_SNS_excess_entropy_approx():
+    assert SNS().excess_entropy_approx(5) == 0.14634002439349647
+    assert SNS().excess_entropy_approx(10) == 0.14722256011732604
