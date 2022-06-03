@@ -13,7 +13,7 @@ class HMM:
     -----------
     Ts : np.array
         Numpy array of labeled transition matrices
-    init : np.array
+    init_dist : np.array
         Array containing the initial probability distribution over hidden states. If None, the stationary state distribution is used
     alphabet : np.array
         Array containing symbols alphabet for HMM
@@ -41,13 +41,13 @@ class HMM:
     excess_entropy_approx(L)
         Returns the Excess Entropy approximation at length L
     '''
-    def __init__(self, Ts, init = np.array([])):
+    def __init__(self, Ts, init_dist = None):
         '''
         Parameters
         -----------
         Ts: np.array
             Labeled transition matrices of the HMM
-        init=None: None or np.array
+        init_dist=None: None or np.array
             Initial state distribution. If none passed, it is taken to be the asymptotic state distribution. 
         '''
         self.Ts = Ts
@@ -55,15 +55,15 @@ class HMM:
         self.state_labels = np.arange(len(Ts[0]))
         
         #initialize state distribution as pi if not specified
-        if init.size == 0:
-            self.init = self.stationary_distribution()
+        if init_dist is None:
+            self.init_dist = self.stationary_distribution()
         else:
-            self.init = init
+            self.init_dist = init_dist
 
     def is_unifilar(self):
         '''bool - returns True if HMM is unifilar'''
         for T in self.Ts:
-            #for each laveled transition matrix count number of non zero entries per row and flag false if any is bigger than 0
+            #for each labelled transition matrix count number of non zero entries per row and flag false if any is bigger than 0
             non_zero= np.count_nonzero(T, axis=1)
             count= len(non_zero[non_zero>1])
             if count > 0:
@@ -82,7 +82,7 @@ class HMM:
         tuple
             (words, probs) are lists of allowed words and their associated probabilities
         '''
-        init_states = self.init
+        init_dist = self.init_dist
         Ts = self.Ts
 
         if L < 1:
@@ -104,7 +104,7 @@ class HMM:
                 words = words_l
 
             for word in list(words):
-                prob = init_states.T
+                prob = init_dist.T
                 for x in word:
                     prob = np.matmul(prob,Ts[int(x)])
                 prob = sum(prob)
@@ -165,13 +165,13 @@ class HMM:
         words = []
 
         #determine initial state for all n words
-        init_states = np.random.choice(np.arange(0,len(self.init)),n,p=self.init)
+        init_dist = np.random.choice(np.arange(0,len(self.init_dist)),n,p=self.init_dist)
 
         for i in range(n):
             word_n = ''
 
             # set initial state vector
-            state = init_states[i]
+            state = init_dist[i]
 
             for l in range(L):
 
@@ -207,7 +207,7 @@ class HMM:
             Shannon entropy rate of state distribution
          '''
         #state entropy of the stationary distribution
-        if dist == None:
+        if dist is None:
             dist = self.stationary_distribution()
         H = entropy(dist, base=2)
         return H
@@ -269,77 +269,73 @@ class HMM:
         return EE_L
 
 
-def evolve(hmm, N, mu0=None, transients=0, word=False):
-    '''
-    takes an initial mixed state and evolves it N time steps (a single path)
+    def evolve(self, N, init_dist=None, transients=0, word=False):
+        '''
+        takes an initial mixed state and evolves it N time steps (a single path)
 
-    Parameters
-    -----------
-    hmm: HMM 
-        Hidden Markov Model of the process of interest
-    N: int
-        Number of time steps to be computed
-    mu0=None: np.array
-        Initial mixed state
-    transients=0: int
-        Number of transients to be thrown away from the path. 
+        Parameters
+        -----------
+        N: int
+            Number of time steps to be computed
+        init_dist=None: None or np.array
+            Initial mixed state
+        transients=0: int
+            Number of transients to be thrown away from the path.
+        word: bool, optional
+            If True returns word generated during evolution 
 
-    Returns
-    --------
-    np.array with the mixed states visited in the path, will have N-transients entries
-    '''
+        Returns
+        --------
+        np.array with the mixed states visited in the path, will have N-transients entries
+        '''
 
-    ts = hmm.Ts
-    num_states = len(ts[0])
-    mstates = np.zeros((N, num_states))
+        ts = self.Ts
+        num_states = len(ts[0])
+        mstates = np.zeros((N, num_states))
 
+        if init_dist is None:
+            init_dist = self.init_dist
 
-    if mu0==None: 
-        mu0 = hmm.init
-    assert near(np.sum(mu0), 1.0)
+        long_word = self.sample_words(1, N)[0]
+        mstates[0]=init_dist
 
-    long_word = hmm.sample_words(1, N)[0]
-    mstates[0]=mu0
+        for i in range(1,len(long_word)):
+            mu = np.matmul(mstates[i-1], ts[int(long_word[i])])
+            mu = mu/np.sum(mu)
+            assert near(np.sum(mu), 1.0)
+            mstates[i]=mu
+        
+        mstates = mstates[transients:]
+        if word:
+            return mstates, long_word
+        else:
+            return mstates
 
-    for i in range(1,len(long_word)):
-        mu = np.matmul(mstates[i-1], ts[int(long_word[i])])
-        mu = mu/np.sum(mu)
-        assert near(np.sum(mu), 1.0)
-        mstates[i]=mu
-    
-    mstates = mstates[transients:]
-    if word:
-        return mstates, long_word
-    else:
-        return mstates
+    def many_paths(self, N, runs, init_dist=None, transients=0):
+        #TODO: allow different initial states for every run?
+        '''
+        Runs evolve 'runs' times and stitches all the resulting mixed states into one array. 
+        For any well behaved hmm and a sufficiently large number of N and runs, this should be 
+        an approximation of the msp states (w/o transitions)
 
-def many_paths(hmm, N, runs, mu0=None, transients=0):
-    #TODO: allow different initial states for every run?
-    '''
-    Runs evolve 'runs' times and stitches all the resulting mixed states into one array. 
-    For any well behaved hmm and a sufficiently large number of N and runs, this should be 
-    an approximation of the msp states (w/o transitions)
+        Parameters:
+        -----------
+        N: int
+            number of timesteps to evolve initial state
+        runs: int
+            number of times the evolution is run (starting in the same initial state)
+        init_dist: np.array or None
+            initial state of hmm
+        transients: int
+            number of transient states to be ignored for each run of the evolution
 
-    Parameters:
-    -----------
-    hmm: HMM
-        hmm of the process of interest
-    N: int
-        number of timesteps to evolve initial state
-    runs: int
-        number of times the evolution is run (starting in the same initial state)
-    mu0: np.array
-        initial state of hmm
-    transients: int
-        number of transient states to be ignored for each run of the evolution
-
-    Returns:
-    --------
-    np.array with the mixed states visited during 'runs' runs of length (N-transients)
-    '''
-    ms_all = evolve(hmm, N, mu0, transients)
-    for i in range(runs-1):
-        path = evolve(hmm, N, mu0, transients)
-        ms_all = np.concatenate((ms_all, path),0)
-    
-    return ms_all
+        Returns:
+        --------
+        np.array with the mixed states visited during 'runs' runs of length (N-transients)
+        '''
+        ms_all = self.evolve(N, init_dist, transients)
+        for i in range(runs-1):
+            path = self.evolve(N, init_dist, transients)
+            ms_all = np.concatenate((ms_all, path),0)
+        
+        return ms_all

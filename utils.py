@@ -5,32 +5,32 @@ from .q_objects import qstate, measurement
 
 #Two state machines
 
-def GoldenMean(p=0.5): 
+def GoldenMean(p=0.5,init_dist=None): 
     t0 = np.array([[0, p],[0,0]])
     t1 = np.array([[1-p, 0],[1,0]])
-    return HMM([t0,t1])
+    return HMM([t0,t1],init_dist)
 
-def Even(p=0.5):
+def Even(p=0.5,init_dist=None):
     t0 = np.array([[1-p, 0],[0,0]])
     t1 = np.array([[0, p],[1,0]])
-    return HMM([t0,t1])
+    return HMM([t0,t1],init_dist)
 
-def SNS(p=0.5,q=0.5):
+def SNS(p=0.5,q=0.5,init_dist=None):
     t0 = np.array([[p, 1-p],[0,q]])
     t1 = np.array([[0, 0],[1-q,0]])
-    return HMM([t0,t1])
+    return HMM([t0,t1],init_dist)
 
 
 #Three State Machines
-def Nemo(p=0.5, q=0.5):
+def Nemo(p=0.5, q=0.5,init_dist=None):
     t0 = np.array([[p,0,0],[0,0,0],[q,0,0]])
     t1 = np.array([[0,1-p,0],[0,0,1],[1-q,0,0]])
-    return HMM([t0,t1])
+    return HMM([t0,t1],init_dist)
 
-def RIP(p=0.5,q=0.5):
+def RIP(p=0.5,q=0.5,init_dist=None):
     t0 = np.array([[0,p,0],[0,0,q],[0,0,0]])
     t1 = np.array([[0,0,1-p],[0,0,1-q],[1,0,0]])
-    return HMM([t0,t1])
+    return HMM([t0,t1],init_dist)
 
 
 # #Some useful states 
