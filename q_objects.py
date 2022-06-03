@@ -152,7 +152,7 @@ class qstate:
         if self.is_normalized():
             return (near(np.trace(np.dot(self.state,self.state)),1))
         else:
-            print('Not Normalized')
+            print('Not Pure')
             return False
         
     def vn_entropy(self,base=2):
