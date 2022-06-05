@@ -45,6 +45,12 @@ def test_is_pure():
     assert ketp.is_pure() == True
     assert max_mix.is_pure() == False
 
+def test_is_valid():
+    assert ket1.is_valid() == True
+    assert (ket1 + ketp).is_valid() == False
+    assert (qstate(np.array([[1,1],[0,0]]))).is_valid() == False
+    assert (qstate(np.array([[2,0],[0,-1]]))).is_valid() == False
+
 def test_vn_entropy():
     max_mix = qstate(np.array([[1/2, 0],[0, 1/2]]))
     assert ketm.vn_entropy() == 0
