@@ -1,5 +1,6 @@
 import numpy as np
 from spqs.utils import *
+import random
 
 def test_addition():
     ket_res = np.array([[1,0],[0,1]])
@@ -55,3 +56,14 @@ def test_vn_entropy():
     max_mix = qstate(np.array([[1/2, 0],[0, 1/2]]))
     assert ketm.vn_entropy() == 0
     assert max_mix.vn_entropy() == 1
+
+def test_measure():
+    np.testing.assert_allclose(ket0.measure(M_01), np.array([1, 0]))
+    np.testing.assert_allclose(ket1.measure(M_01), np.array([0, 1]))
+    np.testing.assert_allclose(ket0.measure(M_param(np.pi/2)), np.array([0.5, 0.5]))
+
+def test_measure_sample():
+    answ = np.array([1, 1, 1, 1, 0, 1, 0])
+    np.random.seed(0)
+    outcomes = ket0.measure_sample(M_param(np.pi/2), 7)
+    assert np.all(outcomes == answ)
