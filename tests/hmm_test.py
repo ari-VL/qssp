@@ -78,13 +78,7 @@ def test_SNS_excess_entropy_approx():
     assert SNS().excess_entropy_approx(10) == 0.14722256011732604
 
 def test_GM_evolve():
-    GM_evolutions_words = [(([[0.66666667, 0.33333333],
-        [1.        , 0.        ]]),
- '01'), (([[0.66666667, 0.33333333],
-        [0.        , 1.        ]]),
- '10'), (([[0.66666667, 0.33333333],
-        [1.        , 0.        ]]),
- '11')]
+    GM_words = ['01', '10', '11']
     GM_evolutions_no_words = [np.array([[0.66666667, 0.33333333],
             [1.        , 0.        ]]),
         np.array([[0.66666667, 0.33333333],
@@ -93,3 +87,19 @@ def test_GM_evolve():
             [1.        , 0.        ]])]
 
     assert np.allclose(GM_evolutions_no_words[0], GoldenMean().evolve(2)) or np.allclose(GM_evolutions_no_words[1], GoldenMean().evolve(2)) or np.allclose(GM_evolutions_no_words[2], GoldenMean().evolve(2))
+    
+    path, word = GoldenMean().evolve(2,word=True)
+    
+    assert (np.allclose(path, GM_evolutions_no_words[0]) and word == GM_words[0]) \
+           or (np.allclose(path, GM_evolutions_no_words[1]) and word == GM_words[1]) \
+           or (np.allclose(path, GM_evolutions_no_words[2]) and word == GM_words[2])
+
+def test_GM_many_paths():
+    GM_mixed_states = np.array([[0.66666667, 0.33333333],
+            [0.        , 1.        ],
+            [1.        , 0.        ]])
+
+    GM_path_states = GoldenMean().many_paths(2,10)
+    
+    for state in GM_path_states:
+        assert np.allclose(GM_mixed_states[0], state) or np.allclose(GM_mixed_states[1], state) or np.allclose(GM_mixed_states[2], state)
