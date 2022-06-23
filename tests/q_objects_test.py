@@ -2,6 +2,12 @@ import numpy as np
 from spqs.utils import *
 import random
 
+def test_init():
+    ket3 = np.array([0.5, 0])
+    rho3 = np.array([[0.25, 0],[0, 0]])
+    state3 = qstate(ket3)
+    np.testing.assert_allclose(state3.state, rho3)
+
 def test_addition():
     ket_res = np.array([[1,0],[0,1]])
     np.testing.assert_allclose((ket0 + ket1).state, ket_res)
@@ -27,6 +33,7 @@ def test_is_normalized():
 
 def test_normalize():
     ket_res = np.array([[1/2,0],[0,1/2]])
+    ket1.normalize()
     keta = ket0+ket1
     keta.normalize()
     np.testing.assert_allclose(keta.state, ket_res)

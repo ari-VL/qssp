@@ -88,7 +88,7 @@ class qstate:
 
     def __rmul__(self, num):
         """ Overloaded reverse multiplication for qstates."""
-        mult = num * self.state
+        mult = self.state * num
 
         return qstate(np.array(mult), test_norm=False)
 
@@ -148,12 +148,15 @@ class qstate:
         
     def is_pure(self):
         """Returns True if state matrix is approximately idempotent."""
-        
-        if self.is_normalized():
-            return (near(np.trace(np.dot(self.state,self.state)),1))
-        else:
-            print('Not Pure')
-            return False
+        sq_trace = np.trace(np.matmul(self.state,self.state))
+        is_p = near(sq_trace,1)
+        return is_p
+##NOTE: DELETED THE FOLLOWING CODE, IT WAS INCORRECT. DO WE WANT A PRINT OPTION?
+       # if self.is_normalized():
+        #    return (near(np.trace(np.dot(self.state,self.state)),1))
+       # else:
+       #     print('Not Pure')
+       #     return False
         
     def vn_entropy(self,base=2):
         """Returns von Neumann entropy of state matrix with desired base.
