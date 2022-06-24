@@ -1,4 +1,5 @@
 import numpy as np
+from spqs.q_objects import measurement
 from spqs.utils import *
 import random
 
@@ -74,3 +75,20 @@ def test_measure_sample():
     np.random.seed(0)
     outcomes = ket0.measure_sample(M_param(np.pi/2), 7)
     assert np.all(outcomes == answ)
+
+def test_m_labels():
+    M01 = measurement([M_0, M_1], labels=['a','b'])
+    #print (M01.labels)
+    assert 'a' in M01.labels
+    assert 'b' in M01.labels
+
+def test_m_is_positive():
+    M_neg = np.array([[-1,0],[0,0]])
+    M_neg1 = measurement([M_neg, M_1])
+    assert M_01.is_positive() == True
+    assert M_neg1.is_positive() == False
+
+def test_m_is_complete():
+    M_inc = measurement([M_0])
+    assert M_inc.is_complete() == False
+    assert M_01.is_complete() == True
