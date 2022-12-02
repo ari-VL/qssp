@@ -2,31 +2,27 @@ TO DO:
 
 General
 -------
-1. Inline documentation
-2. PEP8 naming conventions
+1. Recheck inline documentation
+2. Ensure PEP8 naming conventions
 
 hmm
 ----
-1. Test!
-2. Change alphabet to labels as opposed to just integers
+1. Test
 
 q_objects
 ------
-1. Test!
-2. Overload addition/subtraction
-3. Check/implement partial trace
-4. Tensor product
+1. Test
+3. Implement partial trace
+4. Implement tensor product
 
 qshmm
 ------
 1. Add documentation to qshmm
-2. Fix and test q_block 
-3. Test 
-4. Incorporate change of alphabet from integers to labels. Do we want q alphabet as dictionary?
 
 utils.py
 -----------
 
+------------------------------------------
 
 TO ADD:
 
@@ -44,5 +40,6 @@ q_utils
 ---
 1. Representation/manipulation of kets/bras rather than just density matrices
 
-RECENT CHANGES:
-1. Add standard measurements
+Future Features
+---------------
+2. Change alphabet to labels as opposed to just integers
