@@ -12,6 +12,7 @@ def test_Nemo_unifilar():
 
 def test_GM_all_words():
     assert GoldenMean().all_words(3) == (['010','110','101','011','111'],[1/6,1/6,1/3,1/6,1/6])
+    assert GoldenMean().all_words(0) == ([''], [1])
 
 def test_GM_init_B_all_words():
     assert GoldenMean(init_dist=np.array([0,1])).all_words(3) == (['110','101','111'],[1/4,1/2,1/4])
