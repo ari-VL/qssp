@@ -43,9 +43,10 @@ class qsHMM:
         Returns average state uncertainty of observer measuring in fixed basis on up to L sites
     '''
 
-    def __init__(self, HMM, alph, noise_type='None',noise_level=0):
+    def __init__(self, model, alph, noise_type='None',noise_level=0):
         #should it take in Trans Matrices?
-        self.HMM=HMM
+        assert isinstance(model, HMM), "model must be specified as HMM object"
+        self.HMM=model
         self.noise_type=noise_type
         self.noise_level=noise_level
         if noise_level != 0:
@@ -87,27 +88,18 @@ class qsHMM:
             return q_seq, c_probs
 
     def q_block_entropies(self, L):
-        if L > 0:
-            ents = [0] + [self.q_block(l).vn_entropy() for l in range(1,L+1)]
-        else:
-            ents = []
-            print("ERROR: Invalid block length (must be a positive integer)")
+        assert (isinstance(L, int) and L > 0), "Invalid block length (must be a positive integer)."
+        ents = [0] + [self.q_block(l).vn_entropy() for l in range(1,L+1)]
         return ents
         
     def q_entropy_rate(self, L):
-        if L > 1:
-            s_est = self.q_block(L).vn_entropy() - self.q_block(L-1).vn_entropy()
-        else:
-            s_est = 0
-            print("ERROR: Invalid block length (must be greater than 1)")
+        assert (isinstance(L, int) and L > 0), "Invalid block length (must be a positive integer)."
+        s_est = self.q_block(L).vn_entropy() - self.q_block(L-1).vn_entropy()
         return s_est
         
     def q_excess_entropy(self, L):
-        if L > 1:
-            EE_est = self.q_block(L).vn_entropy() - L * self.q_entropy_rate(L)
-        else:
-            EE_est = 0
-            print("ERROR: Invalid block length (must be greater than 1)")
+        assert (isinstance(L, int) and L > 0), "Invalid block length (must be a positive integer)."
+        EE_est = self.q_block(L).vn_entropy() - L * self.q_entropy_rate(L)
         return EE_est
 
     def get_measured_machine(self, measurement):
@@ -193,9 +185,8 @@ class qsHMM:
 
     def is_synched(self, mixed_state):
         # If mixed state is concentrated in one generator state returns True, else False
-        if not near(sum(mixed_state),1):
-            print("ERROR: State not normalized.")
-        
+        assert near(sum(mixed_state),1), "State not normalized."
+
         for s in mixed_state:
             if (not near(s,0) and not near(s,1)):
                 return False

@@ -302,7 +302,7 @@ class HMM:
         for i in range(1,len(long_word)):
             mu = np.matmul(mstates[i-1], ts[int(long_word[i])])
             mu = mu/np.sum(mu)
-            assert near(np.sum(mu), 1.0)
+            assert near(np.sum(mu), 1.0), "Normalization failed for length-" + str(i) + " mixed state" 
             mstates[i]=mu
         
         mstates = mstates[transients:]
