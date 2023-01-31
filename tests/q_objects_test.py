@@ -29,8 +29,10 @@ def test_div():
 def test_is_normalized():
     ket_norm = qstate(np.array([[1/2,0],[0,1/2]]))
     ket_not_norm = qstate(np.array([[0,3],[0,0]]))
+    bloch_ket_norm = bloch_ket(np.pi)
     assert ket_norm.is_normalized() == True
     assert ket_not_norm.is_normalized() == False
+    assert bloch_ket_norm.is_normalized() == True
 
 def test_normalize():
     ket_res = np.array([[1/2,0],[0,1/2]])
