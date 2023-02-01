@@ -92,3 +92,20 @@ def test_m_is_complete():
     M_inc = measurement([M_0])
     assert M_inc.is_complete() == False
     assert M_01.is_complete() == True
+
+def test_r_mul():
+    mul_state = 1/2 * ket0 + 2* ket1
+    rmul_state = ket0 * 1/2 + ket1 * 2
+    assert mul_state.state.all() == rmul_state.state.all()
+
+def test_noise():
+    np.testing.assert_allclose(ketp.add_noise('phaseflip',0.2).state,\
+                                np.array([[0.5+0.j, 0.3+0.j],[0.3+0.j, 0.5+0.j]]))
+    np.testing.assert_allclose(ket0.add_noise('bitflip',0.2).state,\
+                                np.array([[0.8+0.j, 0.0+0.j],[0.0+0.j, 0.2+0.j]]))
+    np.testing.assert_allclose((1/2*ket0+1/2*ketp).add_noise('bitphaseflip',0.2).state,\
+                                np.array([[0.65+0.j, 0.15+0.j],[0.15+0.j, 0.35+0.j]]))
+    np.testing.assert_allclose(ket0.add_noise('depolarizing',0.2).state,\
+                                np.array([[0.9+0.j, 0.0+0.j],[0.0+0.j, 0.1+0.j]]))
+    np.testing.assert_allclose(ket1.add_noise('amplitude_damping',0.2).state,\
+                                np.array([[0.2+0.j, 0.0+0.j],[0.0+0.j, 0.8+0.j]]))

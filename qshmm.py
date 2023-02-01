@@ -45,7 +45,8 @@ class qsHMM:
 
     def __init__(self, model, alph, noise_type='None',noise_level=0):
         #should it take in Trans Matrices?
-        assert isinstance(model, HMM), "model must be specified as HMM object"
+        if not isinstance(model, HMM):
+            raise TypeError("Model must be specified as HMM object")
         self.HMM=model
         self.noise_type=noise_type
         self.noise_level=noise_level
@@ -68,12 +69,22 @@ class qsHMM:
         
     def q_words(self, n, L):
         #samples n words of length L and returns corresponding quantum states 
+        if not isinstance(L, int):
+            raise TypeError("Invalid word length (must be non-negative integer).")
+        elif (L <= 0):
+            raise ValueError("L must be greater than 0.")
+        
         words = self.HMM.sample_words(n,L)
         q_words = [self.q_word(word) for word in words]
         return q_words
         
     def q_block(self, L, join=True):
         #calculates all the words of length L and their probs and returns the joint quantum state
+        if not isinstance(L, int):
+            raise TypeError("Invalid block length (must be non-negative integer).")
+        elif (L <= 0):
+            raise ValueError("L must greater than 0.")
+        
         words, c_probs = self.HMM.all_words(L)
         if join:
             q_block = c_probs[0] * self.q_word(words[0]).state
@@ -88,17 +99,30 @@ class qsHMM:
             return q_seq, c_probs
 
     def q_block_entropies(self, L):
-        assert (isinstance(L, int) and L > 0), "Invalid block length (must be a positive integer)."
+        if not isinstance(L, int):
+            raise TypeError("Invalid block length (must be non-negative integer).")
+        elif (L <= 0):
+            raise ValueError("L must be greater than 0.")
+        
         ents = [0] + [self.q_block(l).vn_entropy() for l in range(1,L+1)]
         return ents
         
     def q_entropy_rate(self, L):
-        assert (isinstance(L, int) and L > 0), "Invalid block length (must be a positive integer)."
-        s_est = self.q_block(L).vn_entropy() - self.q_block(L-1).vn_entropy()
+        if not isinstance(L, int):
+            raise TypeError("Invalid block length (must be non-negative integer).")
+        elif (L < 1):
+            raise ValueError("L must be greater than 0.")
+        
+        q_ents = self.q_block_entropies(L)
+        s_est = q_ents[-1] - q_ents[-2]
         return s_est
         
     def q_excess_entropy(self, L):
-        assert (isinstance(L, int) and L > 0), "Invalid block length (must be a positive integer)."
+        if not isinstance(L, int):
+            raise TypeError("Invalid block length (must be non-negative integer).")
+        elif (L < 1):
+            raise ValueError("L must be greater than 0.")
+        
         EE_est = self.q_block(L).vn_entropy() - L * self.q_entropy_rate(L)
         return EE_est
 
@@ -185,7 +209,12 @@ class qsHMM:
 
     def is_synched(self, mixed_state):
         # If mixed state is concentrated in one generator state returns True, else False
-        assert near(sum(mixed_state),1), "State not normalized."
+        if not isinstance(mixed_state, list):
+            raise TypeError("Mixed state must be list of probabilities")
+        elif not len(mixed_state) == len(self.HMM.stationary_distribution()):
+            raise ValueError("Mixed state has the wrong number of elements.")
+        elif not near(sum(mixed_state),1):
+            raise ValueError("Mixed state probabilities must sum to 1.")
 
         for s in mixed_state:
             if (not near(s,0) and not near(s,1)):

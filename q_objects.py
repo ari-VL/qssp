@@ -66,7 +66,7 @@ class qstate:
                 print("WARNING: Not normalized")
         
         else:
-            print("ERROR: Invalid input dimensions")
+            raise ValueError("Invalid input dimensions")
     
     def __add__(self, state_2):
         """ Overloaded addition for qstates."""
@@ -212,16 +212,16 @@ class qstate:
         """
 
         if noise_type == 'phaseflip':
-            E_0 = np.sqrt(noise_level)*np.array(([1,0],[0,1]))
-            E_1 = np.sqrt(1-noise_level)*np.array(([1,0],[0,-1]))
+            E_0 = np.sqrt(1-noise_level)*np.array(([1,0],[0,1]))
+            E_1 = np.sqrt(noise_level)*np.array(([1,0],[0,-1]))
             noisy_state = E_0 @ self.state @ (E_0.conj().T) + E_1 @ self.state @ (E_1.conj().T) 
         elif noise_type == 'bitflip':
-            E_0 = np.sqrt(noise_level)*np.array(([1,0],[0,1]))
-            E_1 = np.sqrt(1-noise_level)*np.array(([0,1],[1,0]))
+            E_0 = np.sqrt(1-noise_level)*np.array(([1,0],[0,1]))
+            E_1 = np.sqrt(noise_level)*np.array(([0,1],[1,0]))
             noisy_state = E_0 @ self.state @ (E_0.conj().T) + E_1 @ self.state @ (E_1.conj().T) 
         elif noise_type == 'bitphaseflip':
-            E_0 = np.sqrt(noise_level)*np.array(([1,0],[0,1]))
-            E_1 = np.sqrt(1-noise_level)*np.array(([0,-1j],[1j,0]))
+            E_0 = np.sqrt(1-noise_level)*np.array(([1,0],[0,1]))
+            E_1 = np.sqrt(noise_level)*np.array(([0,-1j],[1j,0]))
             noisy_state = E_0 @ self.state @ (E_0.conj().T) + E_1 @ self.state @ (E_1.conj().T)
         elif noise_type == 'depolarizing':
             noisy_state = noise_level/2 * np.array([[1,0],[0,1]]) + (1-noise_level) * self.state
