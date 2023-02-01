@@ -1,5 +1,5 @@
 import numpy as np
-from spqs.utils import GoldenMean, SNS, Nemo
+from spqs.utils import GoldenMean, SNS, Nemo, RIP, Even
 
 def test_GM_unifilar():
     assert GoldenMean().is_unifilar() == True
@@ -9,6 +9,12 @@ def test_SNS_unifilar():
 
 def test_Nemo_unifilar():
     assert Nemo().is_unifilar() == True
+
+def test_Even_unifilar():
+    assert Even().is_unifilar() == True
+
+def test_RIP_unifilar():
+    assert RIP().is_unifilar() == True
 
 def test_GM_all_words():
     assert GoldenMean().all_words(3) == (['010','110','101','011','111'],[1/6,1/6,1/3,1/6,1/6])
