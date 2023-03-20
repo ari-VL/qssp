@@ -1,6 +1,6 @@
 import numpy as np
-from spqs.q_objects import measurement
-from spqs.utils import *
+from qssp.q_objects import measurement
+from qssp.utils import *
 import random
 
 def test_init():

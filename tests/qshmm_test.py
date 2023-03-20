@@ -1,6 +1,6 @@
 import numpy as np
-from spqs.qshmm import qsHMM
-from spqs.utils import GoldenMean, SNS, A_0p
+from qssp.qshmm import qsHMM
+from qssp.utils import GoldenMean, SNS, A_0p
 
 def test_qGM_alph():
     qGM = qsHMM(GoldenMean(),A_0p)

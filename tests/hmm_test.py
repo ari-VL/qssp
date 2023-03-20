@@ -1,5 +1,5 @@
 import numpy as np
-from spqs.utils import GoldenMean, SNS, Nemo, RIP, Even
+from qssp.utils import GoldenMean, SNS, Nemo, RIP, Even
 
 def test_GM_unifilar():
     assert GoldenMean().is_unifilar() == True
