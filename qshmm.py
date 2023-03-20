@@ -56,7 +56,7 @@ class qsHMM:
                 self.alph.append(alph_state.add_noise(noise_type, noise_level))
         else:
             self.alph= alph
-        self.alph_size= len(alph)
+        self.alph_size= int(len(alph))
         #check alph size is equal to no. of Ts
         
     def q_word(self, word):

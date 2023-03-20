@@ -14,7 +14,7 @@ class qstate:
     
     Attributes
     ----------
-    dim : integer
+    dim : int
         dimension of the Hilbert space
     state: complex numpy array
         density matrix describing the quantum state
@@ -53,14 +53,14 @@ class qstate:
         
         #if amplitudes is ket --> dm
         if amplitudes.ndim == 1:
-            self.dim = len(amplitudes)
+            self.dim = int(len(amplitudes))
             self.state = np.outer(amplitudes.conj().T,amplitudes)
             if(test_norm and (not self.is_normalized())):
                 print("WARNING: Not normalized")
         
         #if amplitudes is matrix -> dm
         elif amplitudes.ndim >= 2:
-            self.dim = len(amplitudes[0])
+            self.dim = int(len(amplitudes[0]))
             self.state = amplitudes
             if(test_norm and (not self.is_normalized())):
                 print("WARNING: Not normalized")
@@ -254,7 +254,7 @@ class measurement:
         Returns True if measurement operators sum to the identity (within tolerance).
     """
 
-    def __init__(self, mOps, labels=None,tol_positivity=1e-8):
+    def __init__(self, mOps, labels=None, tol_positivity=1e-8):
         """
         Parameters
         ----------
@@ -268,7 +268,7 @@ class measurement:
 
         #TODO: check sum to identity, check positivity
         self.mOps = mOps
-        self.n_ops = len(self.mOps)
+        self.n_ops = int(len(self.mOps))
         if labels==None:
             self.labels = range(self.n_ops)
         else:
