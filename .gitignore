@@ -52,3 +52,6 @@ workspace.code-workspace
 Untitled.ipynb
 .ipynb_checkpoints/Untitled-checkpoint.ipynb
 .gitignore
+
+# Mac Stuff
+**/.DS_Store
