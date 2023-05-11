@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "qssp"
+version = "0.0.1"
+authors = [
+  { name="David Gier", email="dgier@ucdavis.edu" },
+  { name="Ariadna Venegas-Li", email="avenegasli@ucdavis.edu" },
+]
+description = "A Python package for creating, manipulating and characterizing Quantum-State Stochastic Processes"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/ari-VL/qssp"
+"Bug Tracker" = "https://github.com/ari-VL/qssp/issues"
