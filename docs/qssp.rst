@@ -37,11 +37,3 @@ qssp.viz module
    :members:
    :undoc-members:
    :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: qssp
-   :members:
-   :undoc-members:
-   :show-inheritance:
