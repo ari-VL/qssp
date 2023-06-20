@@ -5,7 +5,7 @@
 .. py:module:: qssp
 
 ************************************************
-:mod: 'qssp': quantum-state stochastic processes
+'qssp': quantum-state stochastic processes
 ************************************************
 
 Introduction
@@ -33,6 +33,7 @@ Contents:
 
    generalinfo
    modules
+   examples
 
 
 Indices and tables
