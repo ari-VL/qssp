@@ -1,11 +1,5 @@
-qssp package
-============
-
-Submodules
-----------
-
 qssp.hmm module
----------------
+===============
 
 .. automodule:: qssp.hmm
    :members:
@@ -13,7 +7,7 @@ qssp.hmm module
    :show-inheritance:
 
 qssp.q\_objects module
-----------------------
+======================
 
 .. automodule:: qssp.q_objects
    :members:
@@ -21,7 +15,7 @@ qssp.q\_objects module
    :show-inheritance:
 
 qssp.qshmm module
------------------
+=================
 
 .. automodule:: qssp.qshmm
    :members:
@@ -29,7 +23,7 @@ qssp.qshmm module
    :show-inheritance:
 
 qssp.utils module
------------------
+=================
 
 .. automodule:: qssp.utils
    :members:
@@ -37,7 +31,7 @@ qssp.utils module
    :show-inheritance:
 
 qssp.viz module
----------------
+===============
 
 .. automodule:: qssp.viz
    :members:

@@ -5,3 +5,5 @@ qssp
    :maxdepth: 4
 
    qssp
+   examples
+
