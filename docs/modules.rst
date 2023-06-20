@@ -7,5 +7,3 @@ qssp
    qssp
 
 examples
-========
-
