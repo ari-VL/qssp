@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qssp.q_objects &mdash; qssp 00.00.01 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            qssp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">qssp</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">qssp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">qssp.q_objects</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for qssp.q_objects</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="k">as</span> <span class="nn">la</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">entropy</span>
+
+<div class="viewcode-block" id="near"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.near">[docs]</a><span class="k">def</span> <span class="nf">near</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="n">atol</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">b</span><span class="p">)</span><span class="o">&lt;</span><span class="p">(</span><span class="n">atol</span><span class="o">+</span><span class="n">rtol</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">b</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="expect"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.expect">[docs]</a><span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="n">mOp</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+    <span class="c1">#expectation value of measuring state with mop</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">state</span> <span class="o">@</span> <span class="n">mOp</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="qstate"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.qstate">[docs]</a><span class="k">class</span> <span class="nc">qstate</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A discrete state in a Hilbert space</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dim : int</span>
+<span class="sd">        dimension of the Hilbert space</span>
+<span class="sd">    state: complex numpy array</span>
+<span class="sd">        density matrix describing the quantum state</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    is_normalized()</span>
+<span class="sd">        Returns True if state is normalized array, False otherwise</span>
+<span class="sd">    normalize()</span>
+<span class="sd">        Normalizes state if not already normalized</span>
+<span class="sd">    is_hermitian()</span>
+<span class="sd">        Returns True if state is Hermitian array</span>
+<span class="sd">    is_positive()</span>
+<span class="sd">        Returns True if all eigenvalues of state matrix are 0 or positive, False otherwise</span>
+<span class="sd">    is_valid()</span>
+<span class="sd">        Returns True if state is normalized, Hermitian and postive, False otherwise</span>
+<span class="sd">    is_pure()</span>
+<span class="sd">        Returns True if state matrix is approximately idempotent</span>
+<span class="sd">    vn_entropy(base=2)</span>
+<span class="sd">        Returns von Neumann entropy of state matrix with desired base</span>
+<span class="sd">    measure(measurement, labels=False)</span>
+<span class="sd">        Applies measurement to state and returns probabilities of different measurement outcomes</span>
+<span class="sd">    measure_sample(measurement, num_samples)</span>
+<span class="sd">        Returns measurement outcomes when applying measurement sampled &#39;num_samples&#39; times with correct probabilities</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">,</span> <span class="n">test_norm</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        amplitudes: numpy array</span>
+<span class="sd">            Array describing quantum state as vector (pure) or matrix (mixed)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">amplitudes</span> <span class="o">=</span> <span class="n">amplitudes</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
+        
+        <span class="c1">#if amplitudes is ket --&gt; dm</span>
+        <span class="k">if</span> <span class="n">amplitudes</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">amplitudes</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">amplitudes</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">amplitudes</span><span class="p">)</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">test_norm</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_normalized</span><span class="p">())):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: Not normalized&quot;</span><span class="p">)</span>
+        
+        <span class="c1">#if amplitudes is matrix -&gt; dm</span>
+        <span class="k">elif</span> <span class="n">amplitudes</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">amplitudes</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">amplitudes</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">test_norm</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_normalized</span><span class="p">())):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: Not normalized&quot;</span><span class="p">)</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid input dimensions&quot;</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Overloaded addition for qstates.&quot;&quot;&quot;</span>
+        <span class="nb">sum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">+</span> <span class="n">state_2</span><span class="o">.</span><span class="n">state</span>
+
+        <span class="k">return</span> <span class="n">qstate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sum</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Overloaded subtraction for qstates.&quot;&quot;&quot;</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">-</span> <span class="n">state_2</span><span class="o">.</span><span class="n">state</span>
+
+        <span class="k">return</span> <span class="n">qstate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">diff</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Overloaded multiplication for qstates.&quot;&quot;&quot;</span>
+        <span class="n">mult</span> <span class="o">=</span> <span class="n">num</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span>
+
+        <span class="k">return</span> <span class="n">qstate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mult</span><span class="p">),</span> <span class="n">test_norm</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Overloaded reverse multiplication for qstates.&quot;&quot;&quot;</span>
+        <span class="n">mult</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">*</span> <span class="n">num</span>
+
+        <span class="k">return</span> <span class="n">qstate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mult</span><span class="p">),</span> <span class="n">test_norm</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Overloaded division for qstates.&quot;&quot;&quot;</span>
+        <span class="n">div</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">/</span> <span class="n">num</span>
+
+        <span class="k">return</span> <span class="n">qstate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">div</span><span class="p">),</span> <span class="n">test_norm</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<div class="viewcode-block" id="qstate.is_normalized"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.qstate.is_normalized">[docs]</a>    <span class="k">def</span> <span class="nf">is_normalized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns True if state is normalized array, False otherwise.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">near</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">),</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+        
+<div class="viewcode-block" id="qstate.normalize"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.qstate.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Normalizes state if not already normalized.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_normalized</span><span class="p">():</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">/</span><span class="n">norm</span>
+            <span class="k">pass</span></div>
+    
+<div class="viewcode-block" id="qstate.is_hermitian"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.qstate.is_hermitian">[docs]</a>    <span class="k">def</span> <span class="nf">is_hermitian</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns True if state is Hermitian array.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">T</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="qstate.is_positive"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.qstate.is_positive">[docs]</a>    <span class="k">def</span> <span class="nf">is_positive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns True if all eigenvalues of state matrix are 0 or positive, False otherwise.&quot;&quot;&quot;</span>
+       
+        <span class="n">eigs</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="k">return</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="ow">not</span> <span class="n">near</span><span class="p">(</span><span class="n">eig</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">eig</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">eig</span> <span class="ow">in</span> <span class="n">eigs</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="qstate.is_valid"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.qstate.is_valid">[docs]</a>    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns True if state is normalized, Hermitian and postive, False otherwise.&quot;&quot;&quot;</span>
+        
+        <span class="n">normalized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_normalized</span><span class="p">()</span>
+        <span class="n">hermitian</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_hermitian</span><span class="p">()</span>
+        <span class="n">positive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_positive</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="n">normalized</span> <span class="o">&amp;</span> <span class="n">hermitian</span> <span class="o">&amp;</span> <span class="n">positive</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">normalized</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not Normalized&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">hermitian</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not Hermitian&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">positive</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not Positive&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+        
+<div class="viewcode-block" id="qstate.is_pure"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.qstate.is_pure">[docs]</a>    <span class="k">def</span> <span class="nf">is_pure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns True if state matrix is approximately idempotent.&quot;&quot;&quot;</span>
+        <span class="n">sq_trace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">))</span>
+        <span class="n">is_p</span> <span class="o">=</span> <span class="n">near</span><span class="p">(</span><span class="n">sq_trace</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">is_p</span></div>
+<span class="c1">##NOTE: DELETED THE FOLLOWING CODE, IT WAS INCORRECT. DO WE WANT A PRINT OPTION?</span>
+       <span class="c1"># if self.is_normalized():</span>
+        <span class="c1">#    return (near(np.trace(np.dot(self.state,self.state)),1))</span>
+       <span class="c1"># else:</span>
+       <span class="c1">#     print(&#39;Not Pure&#39;)</span>
+       <span class="c1">#     return False</span>
+        
+<div class="viewcode-block" id="qstate.vn_entropy"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.qstate.vn_entropy">[docs]</a>    <span class="k">def</span> <span class="nf">vn_entropy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns von Neumann entropy of state matrix with desired base.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        base : real</span>
+<span class="sd">            Base of logarithm to use (default is 2)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">eigs</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">eigs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="n">near</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="n">e</span><span class="o">.</span><span class="n">real</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">eigs</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">entropy</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span><span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="qstate.measure"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.qstate.measure">[docs]</a>    <span class="k">def</span> <span class="nf">measure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applies measurement to state and returns probabilities of different measurement outcomes.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        measurement : measurement class</span>
+<span class="sd">            Measurement operators to apply to quantum state</span>
+<span class="sd">        labels : Boolean</span>
+<span class="sd">            If True, returns list of strings labeling measurement outcomes, default is False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">expect</span><span class="p">(</span><span class="n">mop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span> <span class="k">for</span> <span class="n">mop</span> <span class="ow">in</span> <span class="n">measurement</span><span class="o">.</span><span class="n">mOps</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">probs</span></div>
+    
+<div class="viewcode-block" id="qstate.measure_sample"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.qstate.measure_sample">[docs]</a>    <span class="k">def</span> <span class="nf">measure_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns measurement outcomes sampled with the correct probabilities.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        measurement: instance of measurement class</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">outcomes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_samples</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_samples</span><span class="p">):</span>
+            <span class="n">outcome</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure</span><span class="p">(</span><span class="n">measurement</span><span class="p">))</span>
+            <span class="n">outcomes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">outcome</span>
+        <span class="k">return</span> <span class="n">outcomes</span></div>
+
+<div class="viewcode-block" id="qstate.add_noise"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.qstate.add_noise">[docs]</a>    <span class="k">def</span> <span class="nf">add_noise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">noise_type</span><span class="p">,</span><span class="n">noise_level</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns state after passing it through a noisy channel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        noise_type: str</span>
+<span class="sd">            Type of noisy channel to use, can be &#39;phaseflip&#39;, &#39;bitflip&#39;,</span>
+<span class="sd">            &#39;bitphaseflip&#39;, &#39;depolarizing&#39;, or &#39;amplitude_damping&#39;</span>
+<span class="sd">        noise_level: float</span>
+<span class="sd">            Amount of noise to apply</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">noise_type</span> <span class="o">==</span> <span class="s1">&#39;phaseflip&#39;</span><span class="p">:</span>
+            <span class="n">E_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">noise_level</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">E_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">noise_level</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">noisy_state</span> <span class="o">=</span> <span class="n">E_0</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">@</span> <span class="p">(</span><span class="n">E_0</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">E_1</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">@</span> <span class="p">(</span><span class="n">E_1</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> 
+        <span class="k">elif</span> <span class="n">noise_type</span> <span class="o">==</span> <span class="s1">&#39;bitflip&#39;</span><span class="p">:</span>
+            <span class="n">E_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">noise_level</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">E_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">noise_level</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">noisy_state</span> <span class="o">=</span> <span class="n">E_0</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">@</span> <span class="p">(</span><span class="n">E_0</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">E_1</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">@</span> <span class="p">(</span><span class="n">E_1</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> 
+        <span class="k">elif</span> <span class="n">noise_type</span> <span class="o">==</span> <span class="s1">&#39;bitphaseflip&#39;</span><span class="p">:</span>
+            <span class="n">E_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">noise_level</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">E_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">noise_level</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="p">],[</span><span class="mi">1</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">noisy_state</span> <span class="o">=</span> <span class="n">E_0</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">@</span> <span class="p">(</span><span class="n">E_0</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">E_1</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">@</span> <span class="p">(</span><span class="n">E_1</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">noise_type</span> <span class="o">==</span> <span class="s1">&#39;depolarizing&#39;</span><span class="p">:</span>
+            <span class="n">noisy_state</span> <span class="o">=</span> <span class="n">noise_level</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">noise_level</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span>
+        <span class="k">elif</span> <span class="n">noise_type</span> <span class="o">==</span> <span class="s1">&#39;amplitude_damping&#39;</span><span class="p">:</span>
+            <span class="n">E_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">noise_level</span><span class="p">)]))</span>
+            <span class="n">E_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">noise_level</span><span class="p">)],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">noisy_state</span> <span class="o">=</span> <span class="n">E_0</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">@</span> <span class="p">(</span><span class="n">E_0</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">E_1</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">@</span> <span class="p">(</span><span class="n">E_1</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown noise type: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">noise_type</span><span class="p">)</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">qstate</span><span class="p">(</span><span class="n">noisy_state</span><span class="p">))</span></div></div>
+    
+<div class="viewcode-block" id="measurement"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.measurement">[docs]</a><span class="k">class</span> <span class="nc">measurement</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A quantum measurement, consisting of a set of operators</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mOps : list of numpy arrays </span>
+<span class="sd">        measurement operators in matrix form</span>
+<span class="sd">    n_ops: int</span>
+<span class="sd">        number of measurement operators</span>
+<span class="sd">    tol_positvity: float</span>
+<span class="sd">        numerical tolerance for checking positivity/completeness of measurement</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    is_postive()</span>
+<span class="sd">        Returns True if all eigenvalues of measurement operators are non-negative.</span>
+<span class="sd">    is_complete()</span>
+<span class="sd">        Returns True if measurement operators sum to the identity (within tolerance).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mOps</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tol_positivity</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mOps: list of numpy arrays</span>
+<span class="sd">            Measurement operators in matrix form</span>
+<span class="sd">        labels: list of strings</span>
+<span class="sd">            List of labels corresponding to measurement outcomes, default is None</span>
+<span class="sd">        tol_postivity: float</span>
+<span class="sd">            Tolerance for checking completeness/positivity of measurement, default is 1e-8</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1">#TODO: check sum to identity, check positivity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mOps</span> <span class="o">=</span> <span class="n">mOps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_ops</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mOps</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">labels</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_ops</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tol_positivity</span><span class="o">=</span> <span class="n">tol_positivity</span>
+
+<div class="viewcode-block" id="measurement.is_positive"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.measurement.is_positive">[docs]</a>    <span class="k">def</span> <span class="nf">is_positive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns True if all eigenvalues of measurement operators are non-negative, otherwise returns False.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">mop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mOps</span><span class="p">:</span>
+            <span class="n">vs</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">mop</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs</span><span class="p">:</span>
+                <span class="c1">#assert val.imag&lt;tol_positivity</span>
+                <span class="c1">#assert val.real &gt;= -1*tol_positivity</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">imag</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">tol_positivity</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">real</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">tol_positivity</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">&amp;</span><span class="n">b</span><span class="p">):</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="measurement.is_complete"><a class="viewcode-back" href="../../qssp.html#qssp.q_objects.measurement.is_complete">[docs]</a>    <span class="k">def</span> <span class="nf">is_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns True if measurement operators sum to the identity (within tolerance), otherwise returns False.&quot;&quot;&quot;</span>
+        
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mOps</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_ops</span><span class="p">))</span></div></div>
+    
+    <span class="c1">#TODO: is_valid</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Gier and Ariadna Venegas-Li.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

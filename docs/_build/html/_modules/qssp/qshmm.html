@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qssp.qshmm &mdash; qssp 00.00.01 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            qssp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">qssp</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">qssp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">qssp.qshmm</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for qssp.qshmm</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="k">as</span> <span class="nn">la</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">entropy</span>
+
+<span class="kn">from</span> <span class="nn">.hmm</span> <span class="kn">import</span> <span class="n">HMM</span>
+<span class="kn">from</span> <span class="nn">.q_objects</span> <span class="kn">import</span> <span class="n">qstate</span>
+
+<div class="viewcode-block" id="near"><a class="viewcode-back" href="../../qssp.html#qssp.qshmm.near">[docs]</a><span class="k">def</span> <span class="nf">near</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="n">atol</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">b</span><span class="p">)</span><span class="o">&lt;</span><span class="p">(</span><span class="n">atol</span><span class="o">+</span><span class="n">rtol</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">b</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="qsHMM"><a class="viewcode-back" href="../../qssp.html#qssp.qshmm.qsHMM">[docs]</a><span class="k">class</span> <span class="nc">qsHMM</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A quantum state Hidden Markov Model consisting of a classical HMM</span>
+<span class="sd">    and an alphabet of quantum states.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    -----------</span>
+<span class="sd">    HMM : HMM object</span>
+<span class="sd">        Numpy array of labeled transition matrices</span>
+<span class="sd">    alph : list of qstates</span>
+<span class="sd">        List of quantum states which are associated with symbols of the classical HMM</span>
+<span class="sd">    alph_size : int</span>
+<span class="sd">        Size of the alphabet of quantum states</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    q_word(word)</span>
+<span class="sd">        Turns given classical word into quantum state using the quantum alphabet</span>
+<span class="sd">    q_words(n, L)</span>
+<span class="sd">        Samples words of length L with appropriate probabilities n times and returns list associated q_words</span>
+<span class="sd">    q_block(L, join = True)</span>
+<span class="sd">        Returns single quantum state represetning all words of length L</span>
+<span class="sd">        or (if join == False) a quantum state and probability for each word</span>
+<span class="sd">    q_block_entropies(L)</span>
+<span class="sd">        Returns a list of von Neumann entropies for blocks of length=1 to length=L</span>
+<span class="sd">    q_entropy_rate(L)</span>
+<span class="sd">        Computes and returns the (difference) von Neumann entropy rate approximation at length L</span>
+<span class="sd">    q_excess_entropy(L)</span>
+<span class="sd">        Returns the quantum excess entropy approximation at length L</span>
+<span class="sd">    get_measured_machine(measurement)</span>
+<span class="sd">        Returns the classical HMM generator corresponding to a particular measurement basis</span>
+<span class="sd">    observer_state_uncertainty(measurement, L, ever_synched = False)</span>
+<span class="sd">        Returns average state uncertainty of observer measuring in fixed basis on up to L sites</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">alph</span><span class="p">,</span> <span class="n">noise_type</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span><span class="n">noise_level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="c1">#should it take in Trans Matrices?</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">HMM</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Model must be specified as HMM object&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">HMM</span><span class="o">=</span><span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noise_type</span><span class="o">=</span><span class="n">noise_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span>
+        <span class="k">if</span> <span class="n">noise_level</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alph</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">alph_state</span> <span class="ow">in</span> <span class="n">alph</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alph</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alph_state</span><span class="o">.</span><span class="n">add_noise</span><span class="p">(</span><span class="n">noise_type</span><span class="p">,</span> <span class="n">noise_level</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alph</span><span class="o">=</span> <span class="n">alph</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alph_size</span><span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">alph</span><span class="p">))</span>
+        <span class="c1">#check alph size is equal to no. of Ts</span>
+        
+<div class="viewcode-block" id="qsHMM.q_word"><a class="viewcode-back" href="../../qssp.html#qssp.qshmm.qsHMM.q_word">[docs]</a>    <span class="k">def</span> <span class="nf">q_word</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">word</span><span class="p">):</span>
+        <span class="c1">#takes in a classical word and turns it into a quantum state</span>
+        <span class="n">q_word</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alph</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span><span class="o">.</span><span class="n">state</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)):</span>
+            <span class="n">q_word</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">q_word</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alph</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">q_word</span> <span class="o">=</span> <span class="n">qstate</span><span class="p">(</span><span class="n">q_word</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">q_word</span></div>
+        
+<div class="viewcode-block" id="qsHMM.q_words"><a class="viewcode-back" href="../../qssp.html#qssp.qshmm.qsHMM.q_words">[docs]</a>    <span class="k">def</span> <span class="nf">q_words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+        <span class="c1">#samples n words of length L and returns corresponding quantum states </span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid word length (must be non-negative integer).&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">L</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;L must be greater than 0.&quot;</span><span class="p">)</span>
+        
+        <span class="n">words</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HMM</span><span class="o">.</span><span class="n">sample_words</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">q_words</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">q_word</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">q_words</span></div>
+        
+<div class="viewcode-block" id="qsHMM.q_block"><a class="viewcode-back" href="../../qssp.html#qssp.qshmm.qsHMM.q_block">[docs]</a>    <span class="k">def</span> <span class="nf">q_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="c1">#calculates all the words of length L and their probs and returns the joint quantum state</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid block length (must be non-negative integer).&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">L</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;L must greater than 0.&quot;</span><span class="p">)</span>
+        
+        <span class="n">words</span><span class="p">,</span> <span class="n">c_probs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HMM</span><span class="o">.</span><span class="n">all_words</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">join</span><span class="p">:</span>
+            <span class="n">q_block</span> <span class="o">=</span> <span class="n">c_probs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_word</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">state</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)):</span>
+                <span class="n">q_block</span> <span class="o">=</span> <span class="n">q_block</span> <span class="o">+</span> <span class="n">c_probs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q_word</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">state</span>
+            <span class="n">q_block</span> <span class="o">=</span> <span class="n">qstate</span><span class="p">(</span><span class="n">q_block</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">q_block</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="n">q_seq</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)):</span>
+                <span class="n">q_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q_word</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">q_seq</span><span class="p">,</span> <span class="n">c_probs</span></div>
+
+<div class="viewcode-block" id="qsHMM.q_block_entropies"><a class="viewcode-back" href="../../qssp.html#qssp.qshmm.qsHMM.q_block_entropies">[docs]</a>    <span class="k">def</span> <span class="nf">q_block_entropies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid block length (must be non-negative integer).&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">L</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;L must be greater than 0.&quot;</span><span class="p">)</span>
+        
+        <span class="n">ents</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">q_block</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">.</span><span class="n">vn_entropy</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">ents</span></div>
+        
+<div class="viewcode-block" id="qsHMM.q_entropy_rate"><a class="viewcode-back" href="../../qssp.html#qssp.qshmm.qsHMM.q_entropy_rate">[docs]</a>    <span class="k">def</span> <span class="nf">q_entropy_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid block length (must be non-negative integer).&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">L</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;L must be greater than 0.&quot;</span><span class="p">)</span>
+        
+        <span class="n">q_ents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_block_entropies</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">s_est</span> <span class="o">=</span> <span class="n">q_ents</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">q_ents</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">s_est</span></div>
+        
+<div class="viewcode-block" id="qsHMM.q_excess_entropy"><a class="viewcode-back" href="../../qssp.html#qssp.qshmm.qsHMM.q_excess_entropy">[docs]</a>    <span class="k">def</span> <span class="nf">q_excess_entropy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid block length (must be non-negative integer).&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">L</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;L must be greater than 0.&quot;</span><span class="p">)</span>
+        
+        <span class="n">EE_est</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_block</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">.</span><span class="n">vn_entropy</span><span class="p">()</span> <span class="o">-</span> <span class="n">L</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_entropy_rate</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">EE_est</span></div>
+
+<div class="viewcode-block" id="qsHMM.get_measured_machine"><a class="viewcode-back" href="../../qssp.html#qssp.qshmm.qsHMM.get_measured_machine">[docs]</a>    <span class="k">def</span> <span class="nf">get_measured_machine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Computes the measured machine when applying &quot;measurement&quot; to the qs_HMM, returns an HMM object</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1">#size of the classical alphabet of the measured machine</span>
+        <span class="n">c_abet_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">mOps</span><span class="p">)</span>
+        <span class="c1">#number of states in the HMM</span>
+        <span class="n">n_states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HMM</span><span class="o">.</span><span class="n">Ts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1">#initialize an array that will store the labeled transition matrices for the measured machine</span>
+        <span class="n">measured_Ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">c_abet_size</span><span class="p">,</span> <span class="n">n_states</span><span class="p">,</span> <span class="n">n_states</span><span class="p">])</span>
+        
+        <span class="c1">#each iteration over i computes th labeled transition matrix of the measured machine T_i</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">c_abet_size</span><span class="p">):</span>
+            <span class="c1">#Initialize labeled transition matrix</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_states</span><span class="p">,</span> <span class="n">n_states</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alph_size</span><span class="p">):</span>
+                <span class="c1">#compute the probability of measurement outcome i when measuring quantum state j</span>
+                <span class="n">prob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alph</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">measure</span><span class="p">(</span><span class="n">measurement</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span>
+                <span class="c1">#weigh the quantum labeled transition matrix of state j by the probability of seeing out come i, and add that for all js</span>
+                <span class="n">t</span> <span class="o">+=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">HMM</span><span class="o">.</span><span class="n">Ts</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">prob</span><span class="p">)</span>
+            <span class="c1">#store labeled transition matrix T_i    </span>
+            <span class="n">measured_Ts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="c1">#create HMM object with the correct transition matrices</span>
+        <span class="n">measured_mach</span> <span class="o">=</span> <span class="n">HMM</span><span class="p">(</span><span class="n">measured_Ts</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">measured_mach</span></div>
+
+<div class="viewcode-block" id="qsHMM.observer_state_uncertainty"><a class="viewcode-back" href="../../qssp.html#qssp.qshmm.qsHMM.observer_state_uncertainty">[docs]</a>    <span class="k">def</span> <span class="nf">observer_state_uncertainty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">measurement</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">ever_synched</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns average state uncertainty of observer measuring in fixed basis on up to L sites</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">S</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">HMM</span><span class="o">.</span><span class="n">init</span><span class="p">]]</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">H_avg</span> <span class="o">=</span> <span class="p">[</span><span class="n">entropy</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">)]</span>
+        
+        <span class="n">meas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_measured_machine</span><span class="p">(</span><span class="n">measurement</span><span class="p">)</span>
+        <span class="n">Ts</span> <span class="o">=</span> <span class="n">meas</span><span class="o">.</span><span class="n">Ts</span>
+        
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">S_t</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">probs_t</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">H_avg_t</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
+                <span class="c1"># Calculates mixed states given L observations using mixed states given (L-1) observations</span>
+                <span class="n">S_prev</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+                <span class="n">prob_prev</span> <span class="o">=</span> <span class="n">probs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+
+                <span class="k">if</span><span class="p">(</span><span class="n">ever_synched</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_synched</span><span class="p">(</span><span class="n">S_prev</span><span class="p">)):</span>
+                    <span class="c1"># If &#39;ever_synched&#39;, stop calculating new mixed states after synchronizing observation</span>
+                    <span class="n">S_t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S_prev</span><span class="p">)</span>
+                    <span class="n">probs_t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prob_prev</span><span class="p">)</span>
+                
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">meas</span><span class="o">.</span><span class="n">Ts</span><span class="p">)):</span>
+                        <span class="n">S_new</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">meas</span><span class="o">.</span><span class="n">Ts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+                        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">meas</span><span class="o">.</span><span class="n">Ts</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+                            <span class="n">prob_k</span> <span class="o">=</span> <span class="mi">0</span>
+
+                            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">meas</span><span class="o">.</span><span class="n">Ts</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="n">near</span><span class="p">(</span><span class="n">Ts</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">],</span><span class="mi">0</span><span class="p">):</span>
+                                    <span class="c1"># Calculate probability of each new mixed state</span>
+                                    <span class="n">prob_k</span> <span class="o">+=</span> <span class="n">S_prev</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span> <span class="n">Ts</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+
+                            <span class="n">S_new</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="n">prob_k</span>
+
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">near</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">S_new</span><span class="p">),</span><span class="mi">0</span><span class="p">):</span>
+                            <span class="n">S_t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S_new</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">S_new</span><span class="p">))</span>
+                            <span class="n">new_prob</span> <span class="o">=</span> <span class="n">prob_prev</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">S_new</span><span class="p">)</span>
+                            <span class="n">probs_t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_prob</span><span class="p">)</span>
+                            <span class="n">H_avg_t</span> <span class="o">+=</span> <span class="n">new_prob</span> <span class="o">*</span> <span class="n">entropy</span><span class="p">(</span><span class="n">S_new</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">S_new</span><span class="p">),</span><span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">S</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S_t</span><span class="p">)</span>
+            <span class="n">probs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">probs_t</span><span class="p">)</span>
+            <span class="n">H_avg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H_avg_t</span><span class="p">)</span>
+
+        <span class="c1"># Returns list of entropies over mixed states for different L values</span>
+        <span class="k">return</span> <span class="n">H_avg</span></div>
+
+<div class="viewcode-block" id="qsHMM.is_synched"><a class="viewcode-back" href="../../qssp.html#qssp.qshmm.qsHMM.is_synched">[docs]</a>    <span class="k">def</span> <span class="nf">is_synched</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mixed_state</span><span class="p">):</span>
+        <span class="c1"># If mixed state is concentrated in one generator state returns True, else False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mixed_state</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Mixed state must be list of probabilities&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">mixed_state</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">HMM</span><span class="o">.</span><span class="n">stationary_distribution</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Mixed state has the wrong number of elements.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">near</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">mixed_state</span><span class="p">),</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Mixed state probabilities must sum to 1.&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">mixed_state</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">near</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">near</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="mi">1</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Gier and Ariadna Venegas-Li.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

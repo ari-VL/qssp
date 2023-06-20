@@ -47,7 +47,7 @@ coverage.xml
 *.pot
 
 # Sphinx documentation
-docs/_build/
+#docs/_build/
 workspace.code-workspace
 Untitled.ipynb
 .ipynb_checkpoints/Untitled-checkpoint.ipynb

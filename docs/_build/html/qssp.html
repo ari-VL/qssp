@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qssp package &mdash; qssp 00.00.01 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="qssp" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            qssp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">qssp</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">qssp package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-qssp.hmm">qssp.hmm module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-qssp.q_objects">qssp.q_objects module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-qssp.qshmm">qssp.qshmm module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-qssp.utils">qssp.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-qssp.viz">qssp.viz module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-qssp">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qssp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">qssp</a></li>
+      <li class="breadcrumb-item active">qssp package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/qssp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="qssp-package">
+<h1>qssp package<a class="headerlink" href="#qssp-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-qssp.hmm">
+<span id="qssp-hmm-module"></span><h2>qssp.hmm module<a class="headerlink" href="#module-qssp.hmm" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="qssp.hmm.HMM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qssp.hmm.</span></span><span class="sig-name descname"><span class="pre">HMM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.HMM" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A Hidden Markov Model representation of a process with basic functionality.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.Ts">
+<span class="sig-name descname"><span class="pre">Ts</span></span><a class="headerlink" href="#qssp.hmm.HMM.Ts" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy array of labeled transition matrices</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.init_dist">
+<span class="sig-name descname"><span class="pre">init_dist</span></span><a class="headerlink" href="#qssp.hmm.HMM.init_dist" title="Permalink to this definition"></a></dt>
+<dd><p>Array containing the initial probability distribution over hidden states. If None, the stationary state distribution is used</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.alphabet">
+<span class="sig-name descname"><span class="pre">alphabet</span></span><a class="headerlink" href="#qssp.hmm.HMM.alphabet" title="Permalink to this definition"></a></dt>
+<dd><p>Array containing symbols alphabet for HMM</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.state_labels">
+<span class="sig-name descname"><span class="pre">state_labels</span></span><a class="headerlink" href="#qssp.hmm.HMM.state_labels" title="Permalink to this definition"></a></dt>
+<dd><p>Array containing labels for states of HMM</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.is_unifilar">
+<span class="sig-name descname"><span class="pre">is_unifilar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.is_unifilar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.HMM.is_unifilar" title="Permalink to this definition"></a></dt>
+<dd><p>Bool- returns True if HMM is unifilar</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.all_words">
+<span class="sig-name descname"><span class="pre">all_words</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.all_words"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.HMM.all_words" title="Permalink to this definition"></a></dt>
+<dd><p>Returns all possible words of length L and their probabilities</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.sample_transition">
+<span class="sig-name descname"><span class="pre">sample_transition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.sample_transition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.HMM.sample_transition" title="Permalink to this definition"></a></dt>
+<dd><p>Samples a possible transition from a given hidden state, with its associated probability. Returnsnext state and the emitted symbol</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.sample_words">
+<span class="sig-name descname"><span class="pre">sample_words</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.sample_words"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.HMM.sample_words" title="Permalink to this definition"></a></dt>
+<dd><p>Samples and returns n words of length L</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.stationary_distribution">
+<span class="sig-name descname"><span class="pre">stationary_distribution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.stationary_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.HMM.stationary_distribution" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the stationary state distribution of the HMM as a numpy array</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.state_entropy">
+<span class="sig-name descname"><span class="pre">state_entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.state_entropy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.HMM.state_entropy" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the Shannon entropy of the given state distribution dist. If None, returns the entropy of the stationary state distribution</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.block_entropies">
+<span class="sig-name descname"><span class="pre">block_entropies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.block_entropies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.HMM.block_entropies" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of block entropies for words of length=1 to length=L</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.entropy_rate_approx">
+<span class="sig-name descname"><span class="pre">entropy_rate_approx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.entropy_rate_approx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.HMM.entropy_rate_approx" title="Permalink to this definition"></a></dt>
+<dd><p>Computes and returns the (difference) entropy rate approximation at length L</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.excess_entropy_approx">
+<span class="sig-name descname"><span class="pre">excess_entropy_approx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.excess_entropy_approx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.HMM.excess_entropy_approx" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the Excess Entropy approximation at length L</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">all_words</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.all_words"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p>Returns all possible words of length L and their probabilities
+:param L: Length of words to be computed
+:type L: int</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(words, probs) are lists of allowed words and their associated probabilities</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">block_entropies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.block_entropies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of block entropies for words of length=0 to length=L
+:param L: Maximum word length for which block entropies will be computed
+:type L: int</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of block entropies for words from length 1 to L</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">entropy_rate_approx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.entropy_rate_approx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition"></a></dt>
+<dd><p>Computes and returns the (difference) entropy rate approximation at length L
+:param L: Length for which entropy rate approximation is computed.
+:type L: int</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Entropy rate approximation</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.evolve">
+<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transients</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.HMM.evolve" title="Permalink to this definition"></a></dt>
+<dd><p>takes an initial mixed state and evolves it N time steps (a single path)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>int</em>) – Number of time steps to be computed</p></li>
+<li><p><strong>init_dist=None</strong> (<em>None</em><em> or </em><em>np.array</em>) – Initial mixed state</p></li>
+<li><p><strong>transients=0</strong> (<em>int</em>) – Number of transients to be thrown away from the path.</p></li>
+<li><p><strong>word</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True returns word generated during evolution</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array with the mixed states visited in the path, will have N-transients entries</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">excess_entropy_approx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.excess_entropy_approx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the Excess Entropy approximation at length L
+:param L: Wordlength at which the entropy rate approximation is computed
+:type L: int</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Excess entropy approximation</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">is_unifilar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.is_unifilar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Permalink to this definition"></a></dt>
+<dd><p>bool - returns True if HMM is unifilar</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.hmm.HMM.many_paths">
+<span class="sig-name descname"><span class="pre">many_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transients</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.many_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.HMM.many_paths" title="Permalink to this definition"></a></dt>
+<dd><p>Runs evolve ‘runs’ times and stitches all the resulting mixed states into one array.
+For any well behaved hmm and a sufficiently large number of N and runs, this should be
+an approximation of the msp states (w/o transitions)</p>
+<dl class="simple">
+<dt>N: int</dt><dd><p>number of timesteps to evolve initial state</p>
+</dd>
+<dt>runs: int</dt><dd><p>number of times the evolution is run (starting in the same initial state)</p>
+</dd>
+<dt>init_dist: np.array or None</dt><dd><p>initial state of hmm</p>
+</dd>
+<dt>transients: int</dt><dd><p>number of transient states to be ignored for each run of the evolution</p>
+</dd>
+</dl>
+<p>np.array with the mixed states visited during ‘runs’ runs of length (N-transients)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">sample_transition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.sample_transition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Permalink to this definition"></a></dt>
+<dd><p>Samples a possible transition from a given hidden state, with its associated probability. Returnsnext state and the emitted symbol
+:param state: State from which a transition will be sampled
+:type state: int</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(new_state, symbol) are both int representing the new state and the symbol emitted during transition</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">sample_words</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.sample_words"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Permalink to this definition"></a></dt>
+<dd><p>Samples and returns n words of length L
+:param n: Number of words to be sampled and returned
+:type n: int
+:param L: Length of words to be sampled and returned
+:type L: int</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of sampled words</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">state_entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.state_entropy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id7" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the Shannon entropy of the given state distribution dist. If None, returns the entropy of the stationary state distribution
+:param dist=None: Distribution whose Shannon entropy will be computed, if None then returns Shannon Entropy of stationary state distribution
+:type dist=None: dist</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Shannon entropy rate of state distribution</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">stationary_distribution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#HMM.stationary_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id8" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the stationary state distribution of the HMM as a numpy array</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.hmm.near">
+<span class="sig-prename descclassname"><span class="pre">qssp.hmm.</span></span><span class="sig-name descname"><span class="pre">near</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/hmm.html#near"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.hmm.near" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-qssp.q_objects">
+<span id="qssp-q-objects-module"></span><h2>qssp.q_objects module<a class="headerlink" href="#module-qssp.q_objects" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.q_objects.expect">
+<span class="sig-prename descclassname"><span class="pre">qssp.q_objects.</span></span><span class="sig-name descname"><span class="pre">expect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mOp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#expect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.expect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="qssp.q_objects.measurement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qssp.q_objects.</span></span><span class="sig-name descname"><span class="pre">measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mOps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_positivity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.measurement" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A quantum measurement, consisting of a set of operators</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qssp.q_objects.measurement.mOps">
+<span class="sig-name descname"><span class="pre">mOps</span></span><a class="headerlink" href="#qssp.q_objects.measurement.mOps" title="Permalink to this definition"></a></dt>
+<dd><p>measurement operators in matrix form</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list of numpy arrays</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qssp.q_objects.measurement.n_ops">
+<span class="sig-name descname"><span class="pre">n_ops</span></span><a class="headerlink" href="#qssp.q_objects.measurement.n_ops" title="Permalink to this definition"></a></dt>
+<dd><p>number of measurement operators</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qssp.q_objects.measurement.tol_positvity">
+<span class="sig-name descname"><span class="pre">tol_positvity</span></span><a class="headerlink" href="#qssp.q_objects.measurement.tol_positvity" title="Permalink to this definition"></a></dt>
+<dd><p>numerical tolerance for checking positivity/completeness of measurement</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.measurement.is_postive">
+<span class="sig-name descname"><span class="pre">is_postive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qssp.q_objects.measurement.is_postive" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if all eigenvalues of measurement operators are non-negative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.measurement.is_complete">
+<span class="sig-name descname"><span class="pre">is_complete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#measurement.is_complete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.measurement.is_complete" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if measurement operators sum to the identity (within tolerance).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">is_complete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#measurement.is_complete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id9" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if measurement operators sum to the identity (within tolerance), otherwise returns False.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.measurement.is_positive">
+<span class="sig-name descname"><span class="pre">is_positive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#measurement.is_positive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.measurement.is_positive" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if all eigenvalues of measurement operators are non-negative, otherwise returns False.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.q_objects.near">
+<span class="sig-prename descclassname"><span class="pre">qssp.q_objects.</span></span><span class="sig-name descname"><span class="pre">near</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#near"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.near" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qssp.q_objects.</span></span><span class="sig-name descname"><span class="pre">qstate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amplitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.qstate" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A discrete state in a Hilbert space</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate.dim">
+<span class="sig-name descname"><span class="pre">dim</span></span><a class="headerlink" href="#qssp.q_objects.qstate.dim" title="Permalink to this definition"></a></dt>
+<dd><p>dimension of the Hilbert space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate.state">
+<span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#qssp.q_objects.qstate.state" title="Permalink to this definition"></a></dt>
+<dd><p>density matrix describing the quantum state</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>complex numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate.is_normalized">
+<span class="sig-name descname"><span class="pre">is_normalized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.is_normalized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.qstate.is_normalized" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if state is normalized array, False otherwise</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate.normalize">
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.qstate.normalize" title="Permalink to this definition"></a></dt>
+<dd><p>Normalizes state if not already normalized</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate.is_hermitian">
+<span class="sig-name descname"><span class="pre">is_hermitian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.is_hermitian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.qstate.is_hermitian" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if state is Hermitian array</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate.is_positive">
+<span class="sig-name descname"><span class="pre">is_positive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.is_positive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.qstate.is_positive" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if all eigenvalues of state matrix are 0 or positive, False otherwise</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate.is_valid">
+<span class="sig-name descname"><span class="pre">is_valid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.is_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.qstate.is_valid" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if state is normalized, Hermitian and postive, False otherwise</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate.is_pure">
+<span class="sig-name descname"><span class="pre">is_pure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.is_pure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.qstate.is_pure" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if state matrix is approximately idempotent</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate.vn_entropy">
+<span class="sig-name descname"><span class="pre">vn_entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.vn_entropy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.qstate.vn_entropy" title="Permalink to this definition"></a></dt>
+<dd><p>Returns von Neumann entropy of state matrix with desired base</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate.measure">
+<span class="sig-name descname"><span class="pre">measure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.measure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.qstate.measure" title="Permalink to this definition"></a></dt>
+<dd><p>Applies measurement to state and returns probabilities of different measurement outcomes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate.measure_sample">
+<span class="sig-name descname"><span class="pre">measure_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.measure_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.qstate.measure_sample" title="Permalink to this definition"></a></dt>
+<dd><p>Returns measurement outcomes when applying measurement sampled ‘num_samples’ times with correct probabilities</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.q_objects.qstate.add_noise">
+<span class="sig-name descname"><span class="pre">add_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noise_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.add_noise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.q_objects.qstate.add_noise" title="Permalink to this definition"></a></dt>
+<dd><p>Returns state after passing it through a noisy channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>noise_type</strong> (<em>str</em>) – Type of noisy channel to use, can be ‘phaseflip’, ‘bitflip’,
+‘bitphaseflip’, ‘depolarizing’, or ‘amplitude_damping’</p></li>
+<li><p><strong>noise_level</strong> (<em>float</em>) – Amount of noise to apply</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">is_hermitian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.is_hermitian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id10" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if state is Hermitian array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">is_normalized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.is_normalized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if state is normalized array, False otherwise.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">is_positive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.is_positive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id12" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if all eigenvalues of state matrix are 0 or positive, False otherwise.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">is_pure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.is_pure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id13" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if state matrix is approximately idempotent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">is_valid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.is_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id14" title="Permalink to this definition"></a></dt>
+<dd><p>Returns True if state is normalized, Hermitian and postive, False otherwise.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">measure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.measure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id15" title="Permalink to this definition"></a></dt>
+<dd><p>Applies measurement to state and returns probabilities of different measurement outcomes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>measurement</strong> (<em>measurement class</em>) – Measurement operators to apply to quantum state</p></li>
+<li><p><strong>labels</strong> (<em>Boolean</em>) – If True, returns list of strings labeling measurement outcomes, default is False</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">measure_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.measure_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id16" title="Permalink to this definition"></a></dt>
+<dd><p>Returns measurement outcomes sampled with the correct probabilities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>measurement</strong> (<em>instance of measurement class</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id17" title="Permalink to this definition"></a></dt>
+<dd><p>Normalizes state if not already normalized.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">vn_entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/q_objects.html#qstate.vn_entropy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id18" title="Permalink to this definition"></a></dt>
+<dd><p>Returns von Neumann entropy of state matrix with desired base.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>base</strong> (<em>real</em>) – Base of logarithm to use (default is 2)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-qssp.qshmm">
+<span id="qssp-qshmm-module"></span><h2>qssp.qshmm module<a class="headerlink" href="#module-qssp.qshmm" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.qshmm.near">
+<span class="sig-prename descclassname"><span class="pre">qssp.qshmm.</span></span><span class="sig-name descname"><span class="pre">near</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#near"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.qshmm.near" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qssp.qshmm.</span></span><span class="sig-name descname"><span class="pre">qsHMM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'None'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.qshmm.qsHMM" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A quantum state Hidden Markov Model consisting of a classical HMM
+and an alphabet of quantum states.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM.HMM">
+<span class="sig-name descname"><span class="pre">HMM</span></span><a class="headerlink" href="#qssp.qshmm.qsHMM.HMM" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy array of labeled transition matrices</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>HMM object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM.alph">
+<span class="sig-name descname"><span class="pre">alph</span></span><a class="headerlink" href="#qssp.qshmm.qsHMM.alph" title="Permalink to this definition"></a></dt>
+<dd><p>List of quantum states which are associated with symbols of the classical HMM</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list of qstates</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM.alph_size">
+<span class="sig-name descname"><span class="pre">alph_size</span></span><a class="headerlink" href="#qssp.qshmm.qsHMM.alph_size" title="Permalink to this definition"></a></dt>
+<dd><p>Size of the alphabet of quantum states</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM.q_word">
+<span class="sig-name descname"><span class="pre">q_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.q_word"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.qshmm.qsHMM.q_word" title="Permalink to this definition"></a></dt>
+<dd><p>Turns given classical word into quantum state using the quantum alphabet</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM.q_words">
+<span class="sig-name descname"><span class="pre">q_words</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.q_words"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.qshmm.qsHMM.q_words" title="Permalink to this definition"></a></dt>
+<dd><p>Samples words of length L with appropriate probabilities n times and returns list associated q_words</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM.q_block">
+<span class="sig-name descname"><span class="pre">q_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">join</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.q_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.qshmm.qsHMM.q_block" title="Permalink to this definition"></a></dt>
+<dd><p>Returns single quantum state represetning all words of length L
+or (if join == False) a quantum state and probability for each word</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM.q_block_entropies">
+<span class="sig-name descname"><span class="pre">q_block_entropies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.q_block_entropies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.qshmm.qsHMM.q_block_entropies" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of von Neumann entropies for blocks of length=1 to length=L</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM.q_entropy_rate">
+<span class="sig-name descname"><span class="pre">q_entropy_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.q_entropy_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.qshmm.qsHMM.q_entropy_rate" title="Permalink to this definition"></a></dt>
+<dd><p>Computes and returns the (difference) von Neumann entropy rate approximation at length L</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM.q_excess_entropy">
+<span class="sig-name descname"><span class="pre">q_excess_entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.q_excess_entropy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.qshmm.qsHMM.q_excess_entropy" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the quantum excess entropy approximation at length L</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM.get_measured_machine">
+<span class="sig-name descname"><span class="pre">get_measured_machine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.get_measured_machine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.qshmm.qsHMM.get_measured_machine" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the classical HMM generator corresponding to a particular measurement basis</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM.observer_state_uncertainty">
+<span class="sig-name descname"><span class="pre">observer_state_uncertainty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ever_synched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.observer_state_uncertainty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.qshmm.qsHMM.observer_state_uncertainty" title="Permalink to this definition"></a></dt>
+<dd><p>Returns average state uncertainty of observer measuring in fixed basis on up to L sites</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">get_measured_machine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.get_measured_machine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id19" title="Permalink to this definition"></a></dt>
+<dd><p>Computes the measured machine when applying “measurement” to the qs_HMM, returns an HMM object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qssp.qshmm.qsHMM.is_synched">
+<span class="sig-name descname"><span class="pre">is_synched</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mixed_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.is_synched"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.qshmm.qsHMM.is_synched" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">observer_state_uncertainty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ever_synched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.observer_state_uncertainty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id20" title="Permalink to this definition"></a></dt>
+<dd><p>Returns average state uncertainty of observer measuring in fixed basis on up to L sites</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">q_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">join</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.q_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id21" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id22">
+<span class="sig-name descname"><span class="pre">q_block_entropies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.q_block_entropies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id22" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">q_entropy_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.q_entropy_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id23" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">q_excess_entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.q_excess_entropy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id24" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id25">
+<span class="sig-name descname"><span class="pre">q_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.q_word"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id25" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id26">
+<span class="sig-name descname"><span class="pre">q_words</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/qshmm.html#qsHMM.q_words"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id26" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-qssp.utils">
+<span id="qssp-utils-module"></span><h2>qssp.utils module<a class="headerlink" href="#module-qssp.utils" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.utils.Even">
+<span class="sig-prename descclassname"><span class="pre">qssp.utils.</span></span><span class="sig-name descname"><span class="pre">Even</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/utils.html#Even"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.utils.Even" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.utils.GoldenMean">
+<span class="sig-prename descclassname"><span class="pre">qssp.utils.</span></span><span class="sig-name descname"><span class="pre">GoldenMean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/utils.html#GoldenMean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.utils.GoldenMean" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.utils.M_param">
+<span class="sig-prename descclassname"><span class="pre">qssp.utils.</span></span><span class="sig-name descname"><span class="pre">M_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/utils.html#M_param"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.utils.M_param" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.utils.Nemo">
+<span class="sig-prename descclassname"><span class="pre">qssp.utils.</span></span><span class="sig-name descname"><span class="pre">Nemo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/utils.html#Nemo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.utils.Nemo" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.utils.RIP">
+<span class="sig-prename descclassname"><span class="pre">qssp.utils.</span></span><span class="sig-name descname"><span class="pre">RIP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/utils.html#RIP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.utils.RIP" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.utils.SNS">
+<span class="sig-prename descclassname"><span class="pre">qssp.utils.</span></span><span class="sig-name descname"><span class="pre">SNS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/utils.html#SNS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.utils.SNS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.utils.bloch_ket">
+<span class="sig-prename descclassname"><span class="pre">qssp.utils.</span></span><span class="sig-name descname"><span class="pre">bloch_ket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/utils.html#bloch_ket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.utils.bloch_ket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-qssp.viz">
+<span id="qssp-viz-module"></span><h2>qssp.viz module<a class="headerlink" href="#module-qssp.viz" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.viz.three_state_msp_scatter">
+<span class="sig-prename descclassname"><span class="pre">qssp.viz.</span></span><span class="sig-name descname"><span class="pre">three_state_msp_scatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/viz.html#three_state_msp_scatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.viz.three_state_msp_scatter" title="Permalink to this definition"></a></dt>
+<dd><p>takes in list of ordered x and y values and returns a scatter plot with mixed states in the 2-simplex</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.viz.three_states_to_simplex">
+<span class="sig-prename descclassname"><span class="pre">qssp.viz.</span></span><span class="sig-name descname"><span class="pre">three_states_to_simplex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_states</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/viz.html#three_states_to_simplex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.viz.three_states_to_simplex" title="Permalink to this definition"></a></dt>
+<dd><p>takes in an array of mixed states (from 3 state machine) and returns two ordered lists of x and y coordinates for the 2-simplex</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qssp.viz.two_states_to_simplex">
+<span class="sig-prename descclassname"><span class="pre">qssp.viz.</span></span><span class="sig-name descname"><span class="pre">two_states_to_simplex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_states</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qssp/viz.html#two_states_to_simplex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qssp.viz.two_states_to_simplex" title="Permalink to this definition"></a></dt>
+<dd><p>takes in an array of mixed states (from 2 state machine) and returns two ordered lists of x and y coordinates for the 1-simplex</p>
+</dd></dl>
+
+</section>
+<section id="module-qssp">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-qssp" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="qssp" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Gier and Ariadna Venegas-Li.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
